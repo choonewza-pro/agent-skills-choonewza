@@ -37,7 +37,7 @@
 - `skills/project-onboarding/references/*.md`
 - `skills/project-onboarding/scripts/check-onboarding.sh`
 
-## How to use
+## วิธีติดตั้ง
 
 หากใช้เครื่องมือ skill manager ให้รันคำสั่งตัวอย่างนี้เพื่อเพิ่ม skill ลงในระบบ:
 
@@ -46,9 +46,3 @@ npx skills add deploy-docker-production
 npx skills add git-commit-guide
 npx skills add project-onboarding
 ```
-
-## วิธีใช้งานเบื้องต้น
-
-1. อ่านไฟล์ `SKILL.md` ในแต่ละโฟลเดอร์เพื่อเข้าใจ scope และการใช้งาน
-2. ใช้คู่มือนี้เป็นแนวทางก่อนรันคำสั่งหรือแก้โค้ด
-3. เมื่อกำลังเขียน agent prompt หรือช่วยเพื่อนร่วมทีม ให้ใช้ข้อมูลใน repo นี้เป็น reference
