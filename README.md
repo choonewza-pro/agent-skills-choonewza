@@ -2,6 +2,17 @@
 
 โปรเจกต์นี้เก็บชุดคู่มือ `SKILL.md` สำหรับ agent ที่ทำงานร่วมกับโค้ดและกระบวนการพัฒนาในโปรเจกต์ Next.js
 
+## วิธีติดตั้ง
+
+หากใช้เครื่องมือ skill manager ให้รันคำสั่งตัวอย่างนี้เพื่อเพิ่ม skill ลงในระบบ:
+
+```bash
+npx skills add deploy-docker-production
+npx skills add git-commit-guide
+npx skills add project-onboarding
+```
+
+
 ## มีอะไรบ้าง
 
 โฟลเดอร์ `skills/` มี 3 skill หลัก:
@@ -37,12 +48,3 @@
 - `skills/project-onboarding/references/*.md`
 - `skills/project-onboarding/scripts/check-onboarding.sh`
 
-## วิธีติดตั้ง
-
-หากใช้เครื่องมือ skill manager ให้รันคำสั่งตัวอย่างนี้เพื่อเพิ่ม skill ลงในระบบ:
-
-```bash
-npx skills add deploy-docker-production
-npx skills add git-commit-guide
-npx skills add project-onboarding
-```
