@@ -1,6 +1,9 @@
 ---
 name: swe-reports-guide
 description: Guidelines and file locations for writing feature and bug fix reports for executives or management. Triggers on requests to write development reports, executive summaries, status updates, feature reports, or bug fix reports.
+metadata:
+  author: choonewza@gmail.com
+  version: "1.0.0"
 ---
 
 # Dev Reports Guide for Executives
@@ -8,7 +11,7 @@ description: Guidelines and file locations for writing feature and bug fix repor
 This skill defines the directory structure and writing standards for development and bug fix reports destined for company leadership and executives.
 
 > [!IMPORTANT]
-> **MANDATORY PREREQUISITE**: Before writing or modifying ANY development report, status update, or executive summary, you **MUST** read and follow the instructions in the [management-talk](.agents/skills/management-talk/SKILL.md) agent skill. Do not rely on memory — always read the skill file to ensure correct tone, vocabulary, and formatting.
+> **MANDATORY PREREQUISITE**: Before writing or modifying ANY development report, status update, or executive summary, you **MUST** read and follow the instructions in the [swe-management-talk](../swe-management-talk/SKILL.md) agent skill. Do not rely on memory — always read the skill file to ensure correct tone, vocabulary, and formatting.
 
 ## 1. Directory Structure & File Locations
 

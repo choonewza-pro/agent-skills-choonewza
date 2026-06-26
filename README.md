@@ -7,15 +7,16 @@
 
 ## 📦 Skills ทั้งหมด
 
-โฟลเดอร์ `skills/` มี **8 skills** แบ่งตามหมวดหมู่:
+โฟลเดอร์ `skills/` มี **9 skills** แบ่งตามหมวดหมู่:
 
 ### 🔧 Development & Deployment
 
 | Skill | คำอธิบาย |
 | :--- | :--- |
-| [`deploy-docker-production`](skills/deploy-docker-production/SKILL.md) | Build และ run Docker image สำหรับ Next.js app แบบ local — ตรวจชื่อ image/container, เลือก env file, เช็ค Docker daemon, ตรวจ tag ซ้ำก่อนรัน |
-| [`git-commit-guide`](skills/git-commit-guide/SKILL.md) | คู่มือเขียน commit message ตาม conventional commit — กำหนด type, scope, checklist ก่อน commit, ข้อควรระวังเรื่อง `.env` และ `--no-verify` |
-| [`project-onboarding`](skills/project-onboarding/SKILL.md) | คู่มือ onboarding สำหรับ developer ใหม่ — ตั้งค่าเบื้องต้น, stack, คำสั่งพื้นฐาน, ตรวจ `package.json` / `.env.example` / `Dockerfile` |
+| [`new-deploy-docker-production`](skills/new-deploy-docker-production/SKILL.md) | Build และ run Docker image สำหรับ Next.js app แบบ local — ตรวจชื่อ image/container, เลือก env file, เช็ค Docker daemon, ตรวจ tag ซ้ำก่อนรัน |
+| [`new-git-commit-guide`](skills/new-git-commit-guide/SKILL.md) | คู่มือเขียน commit message ตาม conventional commit — กำหนด type, scope, checklist ก่อน commit, ข้อควรระวังเรื่อง `.env` และ `--no-verify` |
+| [`new-project-onboarding`](skills/new-project-onboarding/SKILL.md) | คู่มือ onboarding สำหรับ developer ใหม่ — ตั้งค่าเบื้องต้น, stack, คำสั่งพื้นฐาน, ตรวจ `package.json` / `.env.example` / `Dockerfile` |
+| [`new-typescript-guidelines`](skills/new-typescript-guidelines/SKILL.md) | คู่มือแนวทางปฏิบัติ (Coding Conventions) สำหรับ TypeScript และสถาปัตยกรรม App Router ของโปรเจกต์ KruChiron |
 
 ### 🐛 Debugging & Code Review
 
@@ -39,24 +40,30 @@
 AI Agent จะดึงคู่มือ (Skills) เหล่านี้ไปทำงานโดยอัตโนมัติเมื่อเจอกลุ่มคำสั่ง คีย์เวิร์ด หรือสถานการณ์ดังต่อไปนี้:
 
 ### 🔧 Development & Deployment
-* **`deploy-docker-production`**
+* **`new-deploy-docker-production`**
   * **ทำงานเมื่อ:** ต้องการ build Docker image หรือ run container บนเครื่อง local อย่างปลอดภัยโดยอ้างอิงชื่อโปรเจกต์จาก repo จริง
   * **คีย์เวิร์ดที่ใช้ถาม:** 
     * *"ช่วย build docker หน่อย"*
     * *"รัน container ของโปรเจกต์นี้ด้วย docker-compose/docker file"*
     * *"deploy production ในเครื่อง local ยังไง"*
-* **`git-commit-guide`**
+* **`new-git-commit-guide`**
   * **ทำงานเมื่อ:** กำลังจะบันทึกโค้ด (commit) หรือต้องการให้เขียน commit message
   * **คีย์เวิร์ดที่ใช้ถาม:** 
     * *"commit ให้หน่อย"*, *"ช่วยเขียน commit message"*
     * *"git commit"*
     * *"ต้องใส่ scope อะไรตอน commit"*
-* **`project-onboarding`**
+* **`new-project-onboarding`**
   * **ทำงานเมื่อ:** มีนักพัฒนาคนใหม่เข้ามาเริ่มต้นใช้งานโปรเจกต์
   * **คีย์เวิร์ดที่ใช้ถาม:**
     * *"โปรเจกต์นี้ตั้งค่าอย่างไร"*, *"เริ่มรันแอปยังไง"*
     * *"โปรเจกต์นี้ใช้ stack อะไรบ้าง"*
     * *"ขอวิธี setup ตัวฐานข้อมูล/docker สำหรับคนใหม่"*
+* **`new-typescript-guidelines`**
+  * **ทำงานเมื่อ:** มีข้อสงสัยหรือต้องการปรับแต่งแนวทางเขียนโค้ด TypeScript โครงสร้างโฟลเดอร์ และข้อกำหนดของ App Router
+  * **คีย์เวิร์ดที่ใช้ถาม:**
+    * *"แนวทางการเขียน TypeScript ในโปรเจกต์นี้เป็นอย่างไร"*
+    * *"โฟลเดอร์เก็บโค้ดตรงนี้ควรใช้แบบไหนตามไกด์ไลน์"*
+    * *"ช่วยตรวจสอบไวยากรณ์หรือจัดโครงสร้างไฟล์ตาม typescript-guidelines"*
 
 ### 🐛 Debugging & Code Review
 * **`swe-debug-mantra`**
@@ -102,16 +109,18 @@ agent-skills-choonewza/
 │   └── skills/
 │       └── git-commit-guide/      # skill ที่ใช้ภายใน repo นี้เอง
 └── skills/
-    ├── deploy-docker-production/
+    ├── new-deploy-docker-production/
     │   └── SKILL.md
-    ├── git-commit-guide/
+    ├── new-git-commit-guide/
     │   └── SKILL.md
-    ├── project-onboarding/
+    ├── new-project-onboarding/
     │   ├── SKILL.md
     │   ├── assets/templates/
     │   ├── evals/
     │   ├── references/
     │   └── scripts/
+    ├── new-typescript-guidelines/
+    │   └── SKILL.md
     ├── swe-debug-mantra/
     │   └── SKILL.md
     ├── swe-management-talk/
@@ -132,9 +141,10 @@ agent-skills-choonewza/
 
 ```bash
 npx skills add https://github.com/choonewza-pro/agent-skills-choonewza --list
-npx skills add https://github.com/choonewza-pro/agent-skills-choonewza --skill git-commit-guide
-npx skills add https://github.com/choonewza-pro/agent-skills-choonewza --skill project-onboarding
-npx skills add https://github.com/choonewza-pro/agent-skills-choonewza --skill deploy-docker-production
+npx skills add https://github.com/choonewza-pro/agent-skills-choonewza --skill new-git-commit-guide
+npx skills add https://github.com/choonewza-pro/agent-skills-choonewza --skill new-project-onboarding
+npx skills add https://github.com/choonewza-pro/agent-skills-choonewza --skill new-deploy-docker-production
+npx skills add https://github.com/choonewza-pro/agent-skills-choonewza --skill new-typescript-guidelines
 npx skills add https://github.com/choonewza-pro/agent-skills-choonewza --skill swe-debug-mantra
 npx skills add https://github.com/choonewza-pro/agent-skills-choonewza --skill swe-scrutinize
 npx skills add https://github.com/choonewza-pro/agent-skills-choonewza --skill swe-post-mortem

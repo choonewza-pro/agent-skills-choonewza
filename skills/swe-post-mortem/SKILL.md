@@ -1,13 +1,16 @@
 ---
 name: swe-post-mortem
 description: Write the canonical engineering record of a fixed bug — root cause, mechanism, fix, validation, and how it slipped through. Engineer-audience, code identifiers welcome. Use after a debug session lands a fix, before closing the ticket. Trigger on /post-mortem, when the user says "write the post-mortem / postmortem / RCA / root cause analysis", "document this fix", "write up the root cause", "close out this bug with a writeup", or hands you a fixed-and-validated bug and asks for the writeup.
+metadata:
+  author: choonewza@gmail.com
+  version: "1.0.0"
 ---
 
 # Post-mortem
 
 The canonical engineering record of a bug fix. Written **after** debugging lands a real fix, **for** other engineers (and future-you, who will have forgotten everything in 6 months). Code identifiers are welcome here — this is the artifact that lets the next person recover the mental model fast.
 
-For the up-the-org version of this same content, hand the finished post-mortem to [`management-talk`](../../productivity/management-talk/SKILL.md). They compose: post-mortem owns the engineering truth, management-talk reframes it for leadership.
+For the up-the-org version of this same content, hand the finished post-mortem to [`swe-management-talk`](../swe-management-talk/SKILL.md). They compose: post-mortem owns the engineering truth, management-talk reframes it for leadership.
 
 ## When to invoke
 

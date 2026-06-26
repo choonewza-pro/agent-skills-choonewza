@@ -1,8 +1,9 @@
 ---
-name: deploy-docker-production
+name: new-deploy-docker-production
 description: Build and run a local production Docker image for a Next.js app safely. Use this skill when the user wants to build a Docker image, run a container with an env file, check whether an image version already exists locally, or deploy a Next.js app locally with Docker without hard-coding the project name.
-metadata: 
-  version: "2.0.1"
+metadata:
+  author: choonewza@gmail.com
+  version: "1.0.0"
 ---
 
 # Docker Next.js Local Deploy Skill

@@ -1,11 +1,11 @@
 ---
-name: project-onboarding
+name: new-project-onboarding
 description: Use this skill when a developer asks how to set up, run, or understand this Next.js project. Use for onboarding questions such as "โปรเจกต์นี้ตั้งค่าอย่างไร", "เริ่มรันยังไง", "ใช้ stack อะไร", or Docker/Prisma setup questions from someone new to the codebase.
 compatibility: Node.js 22+, npm, Git, MariaDB
 license: MIT
 metadata:
-  author: Akenarin Komkoon
-  version: "2.0.2"
+  author: choonewza@gmail.com
+  version: "1.0.0"
 ---
 
 # Project Onboarding Skill

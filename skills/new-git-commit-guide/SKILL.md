@@ -1,5 +1,5 @@
 ---
-name: git-commit-guide
+name: new-git-commit-guide
 description: >
   Use this skill when committing code, writing commit messages, or reviewing
   git history in this Next.js project. Triggers on: "commit this", "write a
@@ -7,6 +7,9 @@ description: >
   to stage and commit changes. Provides project-specific conventional commit
   format, Thai-language comment conventions, and scope rules matched to this
   codebase's structure.
+metadata:
+  author: choonewza@gmail.com
+  version: "1.0.0"
 ---
 
 # Git Commit Guidelines
