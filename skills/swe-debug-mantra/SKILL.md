@@ -2,7 +2,7 @@
 name: swe-debug-mantra
 description: Four-mantra debugging discipline — reproduce, trace the fail path, falsify the hypothesis, cross-reference every breadcrumb. Recite the mantra block verbatim at the start of any debugging session, then apply the four steps in order before proposing any fix. Trigger on /debug-mantra and proactively whenever debugging starts — user reports a bug, says something is broken/throwing/failing, asks to debug/diagnose/investigate an issue, or pastes a stack trace or error log.
 metadata:
-  author: choonewza@gmail.com
+  author: 9arm skill
   version: "1.0.0"
 ---
 
@@ -13,6 +13,7 @@ Four-step discipline for any debug session. Recite verbatim, then apply in order
 ## Recite this — verbatim, as the first thing in your first response
 
 > **Mantra:**
+>
 > 1. **First is reproducibility.** Can the issue be reproduced reliably?
 > 2. **Know the fail path.** Debugger first; then source trace + knob enumeration; then in-code instrumentation.
 > 3. **Question your hypothesis.** What would disprove it?
@@ -34,14 +35,14 @@ Target: a fast (1–5 s), deterministic pass/fail signal. Pin time, seed the RNG
 
 ## 2. Know the fail path
 
-Once reproducible, find *where* the code breaks and *what stops it from breaking*. The differential narrows the search. Try in this order — escalate only when the prior tactic fails.
+Once reproducible, find _where_ the code breaks and _what stops it from breaking_. The differential narrows the search. Try in this order — escalate only when the prior tactic fails.
 
 1. **Attach a debugger.** If the env supports it, attach and step to the failure site. One breakpoint beats ten logs. Do this **before** turning any knobs.
 2. **Source trace + knob enumeration.** If no debugger (or it can't reach the bug), trace the code path end-to-end and list every knob that can influence the outcome:
    - config flags, env vars, feature toggles
    - branch conditions, input shape
    - timing, concurrency, build options
-   Each knob is a candidate axis to flip in the differential. Flip one at a time.
+     Each knob is a candidate axis to flip in the differential. Flip one at a time.
 3. **In-code instrumentation.** If outside knobs can't move the failure, go inside: `printf` / log statements at the suspected fail site, dump the relevant internal state. Tag every probe with a unique prefix (e.g. `[DBG-a4f2]`) so cleanup is a single grep. Let the trace show where reality diverges from your model.
 
 ## 3. Falsify the hypothesis

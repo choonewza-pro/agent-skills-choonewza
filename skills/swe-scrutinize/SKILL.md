@@ -2,7 +2,7 @@
 name: swe-scrutinize
 description: Outsider-perspective end-to-end review of a plan, PR, or code change. First questions intent and whether a simpler/more elegant approach would achieve the same goal, then traces the actual code path (not just the diff) to verify the change does what it claims. Output is concise, actionable, and every call carries its rationale. Trigger on /scrutinize and proactively whenever the user asks to review, audit, sanity-check, or get a second opinion on a plan, PR, diff, design doc, or proposed code change.
 metadata:
-  author: choonewza@gmail.com
+  author: 9arm skill
   version: "1.0.0"
 ---
 
@@ -14,7 +14,7 @@ Stand outside the change and ask whether it should exist at all, then verify it 
 
 - **Outsider.** Forget who wrote it and why they think it's right. Read the artifact cold.
 - **End-to-end, not diff-local.** The diff is the entry point, not the scope. Follow the call graph through real code paths.
-- **Actionable, concise, with rationale.** Every finding states *what to change*, *why*, and *what evidence* led you there. No filler, no restating the diff back.
+- **Actionable, concise, with rationale.** Every finding states _what to change_, _why_, and _what evidence_ led you there. No filler, no restating the diff back.
 
 ## Workflow
 
