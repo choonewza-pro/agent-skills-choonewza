@@ -1,5 +1,5 @@
 ---
-name: dev-reports-guide
+name: swe-reports-guide
 description: Guidelines and file locations for writing feature and bug fix reports for executives or management. Triggers on requests to write development reports, executive summaries, status updates, feature reports, or bug fix reports.
 ---
 
