@@ -1,5 +1,5 @@
 ---
-name: enterprise-wallet-architecture
+name: swe-enterprise-wallet-architecture
 description: Designs and reviews high-concurrency digital wallet and credit-deduction systems using double-entry bookkeeping, saga patterns, distributed locking, and idempotency controls. Use when designing a wallet system, reviewing payment/credit architecture, choosing between locking strategies, implementing saga or outbox patterns, setting up ledger schemas, or load-testing financial transactions.
 metadata:
   author: choonewza@gmail.com
