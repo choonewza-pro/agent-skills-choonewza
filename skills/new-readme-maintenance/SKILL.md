@@ -1,5 +1,5 @@
 ---
-name: readme-maintenance
+name: new-readme-maintenance
 description: Guide and rules for writing, maintaining, and updating the README.md files for every feature in the codebase. Triggered when creating, modifying, or developing any feature.
 ---
 
