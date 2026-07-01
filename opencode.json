@@ -1,0 +1,72 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "formatter": true,
+  "lsp": true,
+
+  "permission": {
+    "bash": {
+      "git add *": "ask",
+      "git commit *": "ask",
+      "rm *": "ask"
+    }
+  },
+
+  "provider": {
+    "matcha": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Matcha AI",
+
+      "options": {
+        "baseURL": "https://aigateway.ntictsolution.com/v1",
+        "apiKey": "sk-50knIbzHN4py8rE201Blkw"
+      },
+
+      "models": {
+        "gpt-5-mini": {
+          "id": "gpt-5-mini",
+          "name": "GPT 5 (mini)"
+        },
+        "gpt-5-nano": {
+          "id": "gpt-5-nano",
+          "name": "GPT 5 (nano)"
+        },
+        "gpt-4o-mini": {
+          "id": "gpt-4o-mini",
+          "name": "GPT-4o (mini)"
+        },
+        "gpt-4o": {
+          "id": "gpt-4o",
+          "name": "GPT-4o"
+        },
+        "gpt-4.1": {
+          "id": "gpt-4.1",
+          "name": "GPT-4.1"
+        },
+        "gpt-4.1-mini": {
+          "id": "gpt-4.1-mini",
+          "name": "GPT-4.1 (mini)"
+        },
+        "gpt-4.1-nano": {
+          "id": "gpt-4.1-nano",
+          "name": "GPT-4.1 (nano)"
+        },
+        "ict-ollama/qwen3.5:27b": {
+          "id": "ict-ollama/qwen3.5:27b",
+          "name": "Qwen 3.5 27B (Ollama)"
+        },
+        "rnd-vllm/openai/gpt-oss-120b": {
+          "id": "rnd-vllm/openai/gpt-oss-120b",
+          "name": "GPT-OSS 120B (vllm)"
+        }
+      }
+    }
+  },
+
+  "mcp": {
+    "next-devtools-mcp": {
+      "type": "local",
+      "command": ["npx", "-y", "next-devtools-mcp@latest"],
+      "enabled": true
+    }
+  }
+}
