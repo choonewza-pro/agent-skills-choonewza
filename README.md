@@ -7,7 +7,7 @@
 
 ## 📦 Skills ทั้งหมด
 
-โฟลเดอร์ `skills/` มี **11 skills** แบ่งตามหมวดหมู่:
+โฟลเดอร์ `skills/` มี **12 skills** แบ่งตามหมวดหมู่:
 
 ### 🔧 Development & Deployment
 
@@ -18,6 +18,7 @@
 | [`new-project-onboarding`](skills/new-project-onboarding/SKILL.md)                         | คู่มือ onboarding สำหรับ developer ใหม่ — ตั้งค่าเบื้องต้น, stack, คำสั่งพื้นฐาน, ตรวจ `package.json` / `.env.example` / `Dockerfile`                                                           |
 | [`new-typescript-guidelines`](skills/new-typescript-guidelines/SKILL.md)                   | คู่มือแนวทางปฏิบัติ (Coding Conventions) สำหรับ TypeScript และสถาปัตยกรรม App Router ของโปรเจกต์ KruChiron                                                                                      |
 | [`new-readme-maintenance`](skills/new-readme-maintenance/SKILL.md)                         | คู่มือการเขียนและดูแลรักษาเอกสารประกอบฟีเจอร์ (README.md) ในโค้ดเบส — กำหนดโครงสร้างเอกสารและการอัปเดตทุกครั้งที่มีการสร้างหรือแก้ไขฟีเจอร์                                                     |
+| [`new-prevent-encoding-mojibake`](skills/new-prevent-encoding-mojibake/SKILL.md)           | ป้องกันปัญหา encoding ภาษาไทย/อักขระหลายไบต์ (Mojibake) ใน Windows — แนวทางเขียนไฟล์, ตรวจจับ, และกู้คืนข้อความภาษาไทยที่เสียหาย     |
 | [`swe-enterprise-wallet-architecture`](skills/swe-enterprise-wallet-architecture/SKILL.md) | ออกแบบและตรวจสอบระบบกระเป๋าเงินดิจิทัล (Digital Wallet) และระบบหักเครดิตที่มี Concurrency สูง ด้วยหลักการ Double-Entry Bookkeeping, Saga Pattern, Distributed Locking, และ Idempotency Controls |
 | [`swe-review-architecture-project`](skills/swe-review-architecture-project/SKILL.md)       | รีวิว Tech Stack, Dependencies, และโครงสร้างโปรเจคอย่างละเอียด พร้อม Version matrix และคำแนะนำด้าน security/compatibility                                                                       |
 
@@ -74,6 +75,14 @@ AI Agent จะดึงคู่มือ (Skills) เหล่านี้ไ�
     - _"ช่วยอัปเดต README ของฟีเจอร์นี้หน่อย"_
     - _"สร้าง README.md ตามไกด์ไลน์"_
     - _"ต้องเขียนอธิบายฟีเจอร์นี้ใน README อย่างไร"_
+- **`new-prevent-encoding-mojibake`**
+  - **ทำงานเมื่อ:** ต้องเขียนไฟล์ที่มีภาษาไทยหรืออักขระหลายไบต์ใน Windows, หรือพบข้อความภาษาไทยแสดงผลเป็นอักษรประหลาด (Mojibake)
+  - **คีย์เวิร์ดที่ใช้ถาม:**
+    - _"ไทยในไฟล์เป็นตัวอักษรแปลกๆ"_, _"โมจิเบค是什麼"_
+    - _"encoding ภาษาไทยพัง"_
+    - _"เขียนไฟล์ภาษาไทยแล้วอ่านไม่ได้"_
+    - _"ช่วยกู้คืนไฟล์ภาษาไทยที่เสีย"_
+    - พิมพ์คำสั่ง `/prevent-encoding-mojibake`
 - **`swe-enterprise-wallet-architecture`**
   - **ทำงานเมื่อ:** ต้องการออกแบบ ตรวจสอบ หรือพัฒนาสถาปัตยกรรมระบบ Wallet, ระบบการเงิน, การป้องกันการหักเงินซ้ำ หรือการล็อกข้อมูลที่มีการทำงานพร้อมกันสูง
   - **คีย์เวิร์ดที่ใช้ถาม:**
@@ -143,6 +152,8 @@ agent-skills-choonewza/
     │   └── SKILL.md
     ├── new-readme-maintenance/
     │   └── SKILL.md
+    ├── new-prevent-encoding-mojibake/
+    │   └── SKILL.md
     ├── swe-debug-mantra/
     │   └── SKILL.md
     ├── swe-enterprise-wallet-architecture/
@@ -175,6 +186,7 @@ npx skills add https://github.com/choonewza-pro/agent-skills-choonewza --skill n
 npx skills add https://github.com/choonewza-pro/agent-skills-choonewza --skill new-deploy-docker-production
 npx skills add https://github.com/choonewza-pro/agent-skills-choonewza --skill new-typescript-guidelines
 npx skills add https://github.com/choonewza-pro/agent-skills-choonewza --skill new-readme-maintenance
+npx skills add https://github.com/choonewza-pro/agent-skills-choonewza --skill new-prevent-encoding-mojibake
 npx skills add https://github.com/choonewza-pro/agent-skills-choonewza --skill swe-debug-mantra
 npx skills add https://github.com/choonewza-pro/agent-skills-choonewza --skill swe-scrutinize
 npx skills add https://github.com/choonewza-pro/agent-skills-choonewza --skill swe-post-mortem
