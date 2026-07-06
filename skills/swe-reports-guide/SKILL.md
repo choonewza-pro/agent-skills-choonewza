@@ -17,18 +17,18 @@ This skill defines the directory structure and writing standards for development
 
 All reports for executives must be stored in the appropriate subdirectories under `./docs/dev-reports/` as Markdown (`.md`) files:
 
-| Report Type | Directory Path | Example File Path |
-| :--- | :--- | :--- |
-| **New Features** | `./docs/dev-reports/features/` | `./docs/dev-reports/features/occasion-mode.md` |
-| **Bug Fixes** | `./docs/dev-reports/fix-bugs/` | `./docs/dev-reports/fix-bugs/2026-06-26-fix-authentication.md` |
+| Report Type      | Directory Path                 | Example File Path                                              |
+| :--------------- | :----------------------------- | :------------------------------------------------------------- |
+| **New Features** | `./docs/dev-reports/features/` | `./docs/dev-reports/features/2026-07-06-occasion-mode.md`      |
+| **Bug Fixes**    | `./docs/dev-reports/fix-bugs/` | `./docs/dev-reports/fix-bugs/2026-06-26-fix-authentication.md` |
 
-*Note: If the target directory does not exist, create it. If there is an existing legacy folder named `fix-bug`, align or migrate files to the standard `./docs/dev-reports/fix-bugs/` path as appropriate.*
+_Note: All filenames must be prefixed with the creation date in `YYYY-MM-DD-` format (e.g., `2026-07-06-redesign-attach-files.md`). If the target directory does not exist, create it. If there is an existing legacy folder named `fix-bug`, align or migrate files to the standard `./docs/dev-reports/fix-bugs/` path as appropriate._
 
 ## 2. Writing Standards & Tone
 
 When writing reports for leadership, strictly adhere to the following principles from the `management-talk` skill:
 
-1. **Audience Focus**: Write for engineering-savvy non-engineers (VPs, directors, PMs). They care about *state, customer/business impact, ownership, and next steps*.
+1. **Audience Focus**: Write for engineering-savvy non-engineers (VPs, directors, PMs). They care about _state, customer/business impact, ownership, and next steps_.
 2. **Language**: Use professional, polite, and elegant Thai (unless English is explicitly requested) since the project UI is in Thai and the target audience is Thai leadership.
 3. **Information Filtering**:
    - **Keep**: Product names, high-level framework names, system-level component names (e.g., Prisma, PostgreSQL, Server Actions, clean architecture layers).
