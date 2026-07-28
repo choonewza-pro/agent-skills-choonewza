@@ -1,5 +1,5 @@
 ---
-name: new-small-model-prompt-architect
+name: small-model-prompt-architect
 description: >-
   วิเคราะห์ ปรับแต่ง หรือสร้าง System Prompt สำหรับโมเดลขนาดเล็กที่รันบน Ollama เป็นหลัก
   (Gemma, Qwen, Llama, Phi, Mistral, DeepSeek และรุ่นเล็กอื่นๆ) ซึ่งต้องการโครงสร้าง prompt
@@ -79,21 +79,28 @@ thinking แบบถาวร — มีรายงานยืนยันว
 - ใน Ollama: คุม thinking ผ่านพารามิเตอร์ `think` ด้านบนเท่านั้น — reasoning ปิดโดย default อยู่แล้วสำหรับทุกรุ่นใน small series
 - ถ้าเปิด thinking ไว้ ควรรักษา context length อย่างน้อย 128K (`num_ctx`) ไม่งั้นความสามารถ thinking จะเพี้ยน
 
-## Checklist เฉพาะการ deploy local
+## Checklist เฉพาะการ deploy บน Ollama
 
-- **Ollama/llama.cpp มัก set context window เริ่มต้นแค่ ~2,048 token** — ถ้า prompt ยาวกว่านั้นโมเดลอาจเริ่มวนซ้ำ (looping) หรือทำงานพัง ต้องตั้ง context length เองให้ครอบคลุม prompt จริง (`num_ctx` ใน Ollama, `-c` ใน llama.cpp)
-- **Sampling parameters ต้อง set เอง** — โมเดล local ไม่มีค่า default ที่ tune ไว้ดีเท่า API ของ Claude ให้ระบุ temperature/top-k/top-p/min-p ตามคำแนะนำของแต่ละรุ่นชัดเจน อย่าปล่อยให้ runtime ใช้ default เฉยๆ
-- **Function calling ต้อง verify ว่า serving framework รองรับจริง** — เช่น vLLM ต้องเปิด flag อย่าง `--enable-auto-tool-choice` พร้อมระบุ `--tool-call-parser` ให้ตรงกับ family ของโมเดล การที่โมเดลรองรับ native tool calling ไม่ได้แปลว่า runtime จะ parse ออกมาถูกเสมอ
+- **Default context window ~2,048 token** — ถ้า prompt ยาวกว่านั้นโมเดลอาจเริ่มวนซ้ำ (looping) หรือทำงานพัง ต้องตั้งเองให้ครอบคลุม prompt จริง ผ่าน Modelfile (`PARAMETER num_ctx <N>`) หรือ API (`options.num_ctx`)
+- **Sampling parameters ต้อง set เอง** — Ollama ไม่ tune default ให้ดีเท่า API ของ Claude ให้ระบุ temperature/top-k/top-p/min-p ผ่าน Modelfile `PARAMETER` หรือ API `options` ตามคำแนะนำของแต่ละรุ่น
+- **บันทึก system prompt ให้ถาวรผ่าน Modelfile** — ใส่ persona/instructions/format ลงใน `SYSTEM """..."""` แล้ว `ollama create <name> -f Modelfile` เพื่อเรียกซ้ำได้โดยไม่ต้องพิมพ์ prompt ใหม่ทุกครั้ง แต่**อย่า**ฝัง thinking control token ไว้ใน SYSTEM field — ควบคุม thinking แยกผ่านพารามิเตอร์ `think` เสมอ (เหตุผลอยู่ในหัวข้อ Control token ด้านบน)
+- **Tool/function calling ต้อง verify เป็นรายโมเดล** — เช็คหน้า tag บน Ollama library ว่ามี capability "Tools" ระบุไว้จริง การที่โมเดลต้นทางรองรับ native tool calling ไม่ได้แปลว่า Ollama build ของ tag นั้นจะ parse tool call ออกมาถูกเสมอไป ควรทดสอบเรียกจริงก่อนใช้งาน
 
 ## Output ตามโหมด
 
-- **analyze**: ระบุจุดที่ prompt พึ่ง "judgment" ของโมเดลมากเกินไปสำหรับขนาดที่เลือกใช้ พร้อม flag จุดที่ยังไม่ได้ตั้ง control token ให้ถูกต้องตามรุ่นเป้าหมาย
-- **optimize / generate**: คืน prompt ที่ใส่ XML delimiter รอบ section หลัก + ตัวอย่าง 2-3 ตัวอย่าง + control token ที่ตรงกับโมเดลเป้าหมาย พร้อมหมายเหตุ runtime config ที่ต้องตั้งคู่กัน (context window, sampling, tool-call parser)
+- **analyze**: ระบุจุดที่ prompt พึ่ง "judgment" ของโมเดลมากเกินไปสำหรับขนาดที่เลือกใช้ พร้อม flag จุดที่ยังไม่ได้ตั้ง runtime parameter ของ Ollama ให้ถูกต้องตามรุ่นเป้าหมาย (เช่น think, num_ctx)
+- **optimize / generate**: คืน Modelfile หรือ prompt ที่ใส่ XML delimiter รอบ section หลัก + ตัวอย่าง 2-3 ตัวอย่าง พร้อมหมายเหตุค่าที่ต้องตั้งคู่กันบน Ollama (num_ctx, sampling parameters, think parameter สำหรับโมเดลที่รองรับ)
 
-## ตัวอย่าง (target: gemma4:e4b, ต้องการเปิด thinking)
+## ตัวอย่าง (target: gemma4:e4b บน Ollama)
+
+**Modelfile:**
 
 ```
-<|think|>
+FROM: gemma4:e4b
+PARAMETER num_ctx: 8192
+PARAMETER temperature: 0.7
+PARAMETER think: true
+SYSTEM """
 <identity>
 คุณคือผู้ช่วยตอบคำถามจากเอกสารภายในองค์กร ตอบสั้น ตรงประเด็น
 </identity>
@@ -112,7 +119,5 @@ thinking แบบถาวร — มีรายงานยืนยันว
 คำถาม: นโยบายลาป่วยกี่วันต่อปี?
 คำตอบ: ตามเอกสาร พนักงานลาป่วยได้ 30 วันต่อปี
 </example>
+"""
 ```
-
-(สังเกตว่า XML delimiter, ตัวอย่าง 1 ชุด, และ `<|think|>` ยังอยู่ครบ — ตรงข้ามกับแนวทาง Claude 5
-gen ที่จะตัดสิ่งเหล่านี้ออกเพื่อความกระชับ เพราะโมเดลขนาดนี้ต้องการโครงสร้างที่ชัดเจนกว่า)
