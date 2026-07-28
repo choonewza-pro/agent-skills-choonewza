@@ -1,5 +1,5 @@
 ---
-name: small-model-prompt-architect
+name: new-small-model-prompt-architect
 description: >-
   วิเคราะห์ ปรับแต่ง หรือสร้าง System Prompt สำหรับโมเดลขนาดเล็กที่รันบน Ollama เป็นหลัก
   (Gemma, Qwen, Llama, Phi, Mistral, DeepSeek และรุ่นเล็กอื่นๆ) ซึ่งต้องการโครงสร้าง prompt
