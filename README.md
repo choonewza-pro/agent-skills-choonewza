@@ -7,7 +7,7 @@
 
 ## 📦 Skills ทั้งหมด
 
-โฟลเดอร์ `skills/` มี **12 skills** แบ่งตามหมวดหมู่:
+โฟลเดอร์ `skills/` มี **16 skills** แบ่งตามหมวดหมู่:
 
 ### 🔧 Development & Deployment
 
@@ -17,10 +17,12 @@
 | [`new-git-commit-guide`](skills/new-git-commit-guide/SKILL.md)                             | คู่มือเขียน commit message ตาม conventional commit — กำหนด type, scope, checklist ก่อน commit, ข้อควรระวังเรื่อง `.env` และ `--no-verify`                                                       |
 | [`new-project-onboarding`](skills/new-project-onboarding/SKILL.md)                         | คู่มือ onboarding สำหรับ developer ใหม่ — ตั้งค่าเบื้องต้น, stack, คำสั่งพื้นฐาน, ตรวจ `package.json` / `.env.example` / `Dockerfile`                                                           |
 | [`new-typescript-guidelines`](skills/new-typescript-guidelines/SKILL.md)                   | คู่มือแนวทางปฏิบัติ (Coding Conventions) สำหรับ TypeScript และสถาปัตยกรรม App Router ของโปรเจกต์ KruChiron                                                                                      |
-| [`new-readme-maintenance`](skills/new-readme-maintenance/SKILL.md)                         | คู่มือการเขียนและดูแลรักษาเอกสารประกอบฟีเจอร์ (README.md) ในโค้ดเบส — กำหนดโครงสร้างเอกสารและการอัปเดตทุกครั้งที่มีการสร้างหรือแก้ไขฟีเจอร์                                                     |
-| [`new-prevent-encoding-mojibake`](skills/new-prevent-encoding-mojibake/SKILL.md)           | ป้องกันปัญหา encoding ภาษาไทย/อักขระหลายไบต์ (Mojibake) ใน Windows — แนวทางเขียนไฟล์, ตรวจจับ, และกู้คืนข้อความภาษาไทยที่เสียหาย     |
-| [`swe-enterprise-wallet-architecture`](skills/swe-enterprise-wallet-architecture/SKILL.md) | ออกแบบและตรวจสอบระบบกระเป๋าเงินดิจิทัล (Digital Wallet) และระบบหักเครดิตที่มี Concurrency สูง ด้วยหลักการ Double-Entry Bookkeeping, Saga Pattern, Distributed Locking, และ Idempotency Controls |
-| [`swe-review-architecture-project`](skills/swe-review-architecture-project/SKILL.md)       | รีวิว Tech Stack, Dependencies, และโครงสร้างโปรเจคอย่างละเอียด พร้อม Version matrix และคำแนะนำด้าน security/compatibility                                                                       |
+| [`new-readme-engineering`](skills/new-readme-engineering/SKILL.md)                         | คู่มือการเขียนและดูแลรักษา README.md สำหรับโปรเจกต์ซอฟต์แวร์ — เน้นการตรวจสอบโค้ดเบสก่อนเขียน ความถูกต้องของข้อมูล และโครงสารสนเทศที่มืออาชีพใช้                                                                                         |
+| [`new-prevent-encoding-mojibake`](skills/new-prevent-encoding-mojibake/SKILL.md)           | ป้องกันปัญหา encoding ภาษาไทย/อักขระหลายไบต์ (Mojibake) ใน Windows — แนวทางเขียนไฟล์, ตรวจจับ, และกู้คืนข้อความภาษาไทยที่เสียหาย                                                                                                      |
+| [`new-small-model-prompt-architect`](skills/new-small-model-prompt-architect/SKILL.md)     | วิเคราะห์ ปรับแต่ง และสร้าง System Prompt สำหรับโมเดลขนาดเล็ก (Gemma, Qwen, Llama, Phi, Mistral, DeepSeek) ที่รันบน Ollama — ออกแบบโครงสร้าง prompt เพื่อประสิทธิภาพสูงสุดกับข้อจำกัดของโมเดลเล็ก                                    |
+| [`swe-enterprise-wallet-architecture`](skills/swe-enterprise-wallet-architecture/SKILL.md) | ออกแบบและตรวจสอบระบบกระเป๋าเงินดิจิทัล (Digital Wallet) และระบบหักเครดิตที่มี Concurrency สูง ด้วยหลักการ Double-Entry Bookkeeping, Saga Pattern, Distributed Locking, และ Idempotency Controls                                      |
+| [`swe-mcp-server-development`](skills/swe-mcp-server-development/SKILL.md)                 | แนะนำการสร้าง MCP Server ที่เปิดเผย tools, resources และ prompts ให้กับ LLM application — ครอบคลุมการออกแบบ, การพัฒนา, และการทดสอบ MCP Server                                                                                        |
+| [`swe-review-architecture-project`](skills/swe-review-architecture-project/SKILL.md)       | รีวิว Tech Stack, Dependencies, และโครงสร้างโปรเจคอย่างละเอียด พร้อม Version matrix และคำแนะนำด้าน security/compatibility                                                                                                            |
 
 ### 🐛 Debugging & Code Review
 
@@ -36,6 +38,12 @@
 | :----------------------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------- |
 | [`swe-reports-guide`](skills/swe-reports-guide/SKILL.md)     | แนวทางเขียน feature/bug fix report สำหรับผู้บริหาร — กำหนดโครงสร้างโฟลเดอร์ `docs/dev-reports/` และมาตรฐานการเขียน                 |
 | [`swe-management-talk`](skills/swe-management-talk/SKILL.md) | แปลงเนื้อหา engineer-to-engineer เป็นภาษาสำหรับผู้บริหาร — รองรับหลาย channel: JIRA, Slack, standup, email, meeting talking-points |
+
+### 🧪 QA & Testing
+
+| Skill                                                        | คำอธิบาย                                                                                                                                 |
+| :----------------------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------- |
+| [`swe-test-engineer`](skills/swe-test-engineer/SKILL.md)     | วิเคราะห์ requirements และสร้าง test cases ด้วย Boundary Value Analysis (BVA), Equivalence Partitioning (EP) และเทคนิคอื่นๆ — รองรับทั้ง business users และ technical users |
 
 ---
 
@@ -69,12 +77,13 @@ AI Agent จะดึงคู่มือ (Skills) เหล่านี้ไ�
     - _"แนวทางการเขียน TypeScript ในโปรเจกต์นี้เป็นอย่างไร"_
     - _"โฟลเดอร์เก็บโค้ดตรงนี้ควรใช้แบบไหนตามไกด์ไลน์"_
     - _"ช่วยตรวจสอบไวยากรณ์หรือจัดโครงสร้างไฟล์ตาม typescript-guidelines"_
-- **`new-readme-maintenance`**
-  - **ทำงานเมื่อ:** มีการสร้าง พัฒนา หรือแก้ไขโมดูลฟีเจอร์ต่างๆ ในโค้ดเบส และจำเป็นต้องอัปเดตหรือสร้าง README.md ของฟีเจอร์นั้นๆ
+- **`new-readme-engineering`**
+  - **ทำงานเมื่อ:** ต้องการเขียน, รีวิว, หรือปรับปรุง README.md สำหรับโปรเจกต์ซอฟต์แวร์ใดๆ
   - **คีย์เวิร์ดที่ใช้ถาม:**
     - _"ช่วยอัปเดต README ของฟีเจอร์นี้หน่อย"_
-    - _"สร้าง README.md ตามไกด์ไลน์"_
-    - _"ต้องเขียนอธิบายฟีเจอร์นี้ใน README อย่างไร"_
+    - _"สร้าง README.md ให้โปรเจกต์นี้"_
+    - _"review my README"_
+    - _"clean up my documentation"_
 - **`new-prevent-encoding-mojibake`**
   - **ทำงานเมื่อ:** ต้องเขียนไฟล์ที่มีภาษาไทยหรืออักขระหลายไบต์ใน Windows, หรือพบข้อความภาษาไทยแสดงผลเป็นอักษรประหลาด (Mojibake)
   - **คีย์เวิร์ดที่ใช้ถาม:**
@@ -91,6 +100,18 @@ AI Agent จะดึงคู่มือ (Skills) เหล่านี้ไ�
     - _"ทำระบบป้องกันเงินติดลบ/หักเงินซ้ำซ้อน (double spending)"_
     - _"สถาปัตยกรรมบัญชีแยกประเภทคู่ (double-entry ledger)"_
     - _"ทำ Saga หรือ Transactional Outbox"_
+- **`new-small-model-prompt-architect`**
+  - **ทำงานเมื่อ:** ต้องการออกแบบหรือปรับแต่ง System Prompt สำหรับโมเดลภาษาเล็กที่รันด้วย Ollama
+  - **คีย์เวิร์ดที่ใช้ถาม:**
+    - _"ช่วยเขียน system prompt ให้โมเดลเล็ก"_
+    - _"ปรับ prompt ให้เหมาะกับ Gemma/Qwen/Llama"_
+    - _"ทำ prompt architecting"_
+- **`swe-mcp-server-development`**
+  - **ทำงานเมื่อ:** ต้องการพัฒนา, ออกแบบ, หรือแก้ไข MCP Server สำหรับเชื่อมต่อกับ LLM application
+  - **คีย์เวิร์ดที่ใช้ถาม:**
+    - _"ช่วยสร้าง MCP server"_
+    - _"ออกแบบ tool/resource/prompt สำหรับ MCP"_
+    - _"วิธีทำ Model Context Protocol server"_
 
 ### 🐛 Debugging & Code Review
 
@@ -112,6 +133,16 @@ AI Agent จะดึงคู่มือ (Skills) เหล่านี้ไ�
     - _"ช่วยเขียน post-mortem สำหรับบั๊กนี้หน่อย"_, _"ทำสรุป RCA ของปัญหาที่เพิ่งแก้เสร็จ"_
     - พิมพ์คำสั่ง `/swe-post-mortem` หรือ `/post-mortem`
     - _"เขียนสรุปสาเหตุรากเหง้า (root cause) และการป้องกันปัญหาในอนาคต"_
+
+### 🧪 QA & Testing
+
+- **`swe-test-engineer`**
+  - **ทำงานเมื่อ:** ต้องการวิเคราะห์ requirements และสร้าง test cases อย่างเป็นระบบ
+  - **คีย์เวิร์ดที่ใช้ถาม:**
+    - _"ช่วยเขียน test cases ให้"_
+    - _"ทำ Boundary Value Analysis"_
+    - _"สร้าง test cases จาก requirement"_
+    - _"ออกแบบชุดทดสอบสำหรับฟีเจอร์นี้"_
 
 ### 📝 Reporting & Communication
 
@@ -137,10 +168,16 @@ agent-skills-choonewza/
 ├── .agent/
 │   └── skills/
 │       └── git-commit-guide/      # skill ที่ใช้ภายใน repo นี้เอง
+├── docs/
+│   ├── baseline-mcp-server.txt
+│   └── claude_agent_skills_guide.md
+├── opencode.json
 └── skills/
     ├── new-deploy-docker-production/
     │   └── SKILL.md
     ├── new-git-commit-guide/
+    │   └── SKILL.md
+    ├── new-prevent-encoding-mojibake/
     │   └── SKILL.md
     ├── new-project-onboarding/
     │   ├── SKILL.md
@@ -148,11 +185,11 @@ agent-skills-choonewza/
     │   ├── evals/
     │   ├── references/
     │   └── scripts/
+    ├── new-readme-engineering/
+    │   └── SKILL.md
+    ├── new-small-model-prompt-architect/
+    │   └── SKILL.md
     ├── new-typescript-guidelines/
-    │   └── SKILL.md
-    ├── new-readme-maintenance/
-    │   └── SKILL.md
-    ├── new-prevent-encoding-mojibake/
     │   └── SKILL.md
     ├── swe-debug-mantra/
     │   └── SKILL.md
@@ -162,6 +199,8 @@ agent-skills-choonewza/
     │   └── references/
     ├── swe-management-talk/
     │   └── SKILL.md
+    ├── swe-mcp-server-development/
+    │   └── SKILL.md
     ├── swe-post-mortem/
     │   └── SKILL.md
     ├── swe-reports-guide/
@@ -169,7 +208,9 @@ agent-skills-choonewza/
     ├── swe-review-architecture-project/
     │   ├── SKILL.md
     │   └── README.md
-    └── swe-scrutinize/
+    ├── swe-scrutinize/
+    │   └── SKILL.md
+    └── swe-test-engineer/
         └── SKILL.md
 ```
 
@@ -185,14 +226,17 @@ npx skills add https://github.com/choonewza-pro/agent-skills-choonewza --skill n
 npx skills add https://github.com/choonewza-pro/agent-skills-choonewza --skill new-project-onboarding
 npx skills add https://github.com/choonewza-pro/agent-skills-choonewza --skill new-deploy-docker-production
 npx skills add https://github.com/choonewza-pro/agent-skills-choonewza --skill new-typescript-guidelines
-npx skills add https://github.com/choonewza-pro/agent-skills-choonewza --skill new-readme-maintenance
+npx skills add https://github.com/choonewza-pro/agent-skills-choonewza --skill new-readme-engineering
 npx skills add https://github.com/choonewza-pro/agent-skills-choonewza --skill new-prevent-encoding-mojibake
+npx skills add https://github.com/choonewza-pro/agent-skills-choonewza --skill new-small-model-prompt-architect
 npx skills add https://github.com/choonewza-pro/agent-skills-choonewza --skill swe-debug-mantra
 npx skills add https://github.com/choonewza-pro/agent-skills-choonewza --skill swe-scrutinize
 npx skills add https://github.com/choonewza-pro/agent-skills-choonewza --skill swe-post-mortem
 npx skills add https://github.com/choonewza-pro/agent-skills-choonewza --skill swe-reports-guide
 npx skills add https://github.com/choonewza-pro/agent-skills-choonewza --skill swe-management-talk
 npx skills add https://github.com/choonewza-pro/agent-skills-choonewza --skill swe-enterprise-wallet-architecture
+npx skills add https://github.com/choonewza-pro/agent-skills-choonewza --skill swe-mcp-server-development
+npx skills add https://github.com/choonewza-pro/agent-skills-choonewza --skill swe-test-engineer
 ```
 
 หรือ copy โฟลเดอร์ skill ที่ต้องการไปไว้ใน `.agent/skills/` ของโปรเจกต์เป้าหมายโดยตรง

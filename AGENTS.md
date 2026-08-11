@@ -1,3 +1,32 @@
+# Agent Skills Repository
+
+This is a **skill collection** for OpenCode AI agents — not an app. Each `skills/<name>/SKILL.md` is a self-contained skill with frontmatter (`name`, `description`) that agents load via the `skill` tool.
+
+## Repo structure
+
+```
+.agent/skills/git-commit-guide/  # local skill for this repo's own workflow
+skills/                          # 16 publishable skills (README is stale)
+docs/                            # reference docs (baseline-mcp-server, agent skills guide)
+opencode.json                    # custom provider (Matcha AI), MCP config, permission rules
+```
+
+## Key facts
+
+- **16 skills** in `skills/` (README only documents 12 — trust `ls skills/` over README)
+- `opencode.json` uses a custom Matcha AI provider at `https://aigateway.ntictsolution.com/v1` with models: `gpt-5-mini`, `gpt-5-nano`, `gpt-4o-mini`, `gpt-4.1*`, `ict-ollama/qwen3.5:27b`, `rnd-vllm/openai/gpt-oss-120b`
+- **Permission rules**: `git add *`, `git commit *`, `rm *` require user approval ("ask")
+- **MCP enabled**: `next-devtools-mcp` — but this is a skill repo, not a Next.js app, so MCP tools will likely fail here
+- `.gitignore` only ignores `.serena/` — do not commit `node_modules/` or other artifacts
+- All skill files use UTF-8 encoding (Thai content is common)
+- The `.agent/skills/git-commit-guide` skill applies to commits in **this repo** — consult it for commit style
+
+## Creating/editing a skill
+
+- Every skill needs frontmatter: `name` and `description`
+- Place under `skills/<name>/SKILL.md`
+- Register new skills in `README.md` table (the README is the canonical catalog)
+
 <!-- headroom:rtk-instructions -->
 # RTK (Rust Token Killer) - Token-Optimized Commands
 
