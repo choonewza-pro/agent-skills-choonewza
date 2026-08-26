@@ -6,14 +6,14 @@ This is a **skill collection** for OpenCode AI agents — not an app. Each `skil
 
 ```
 .agent/skills/git-commit-guide/  # local skill for this repo's own workflow
-skills/                          # 16 publishable skills (README is stale)
+skills/                          # 19 publishable skills
 docs/                            # reference docs (baseline-mcp-server, agent skills guide)
 opencode.json                    # custom provider (Matcha AI), MCP config, permission rules
 ```
 
 ## Key facts
 
-- **16 skills** in `skills/` (README only documents 12 — trust `ls skills/` over README)
+- **19 skills** in `skills/` (see `README.md` for the full catalog)
 - `opencode.json` uses a custom Matcha AI provider at `https://aigateway.ntictsolution.com/v1` with models: `gpt-5-mini`, `gpt-5-nano`, `gpt-4o-mini`, `gpt-4.1*`, `ict-ollama/qwen3.5:27b`, `rnd-vllm/openai/gpt-oss-120b`
 - **Permission rules**: `git add *`, `git commit *`, `rm *` require user approval ("ask")
 - **MCP enabled**: `next-devtools-mcp` — but this is a skill repo, not a Next.js app, so MCP tools will likely fail here
