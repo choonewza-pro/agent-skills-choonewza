@@ -11,7 +11,7 @@ npx skills add https://github.com/choonewza-pro/agent-skills-choonewza
 
 ## 📦 Skills ทั้งหมด
 
-โฟลเดอร์ `skills/` มี **20 skills** แบ่งตามหมวดหมู่:
+โฟลเดอร์ `skills/` มี **21 skills** แบ่งตามหมวดหมู่:
 
 ### 🔧 Development & Deployment
 
@@ -50,8 +50,9 @@ npx skills add https://github.com/choonewza-pro/agent-skills-choonewza
 
 | Skill                                                          | คำอธิบาย                                                                                                                                                              |
 | :------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [`swe-test-planner`](skills/swe-test-planner/SKILL.md)         | สแกน codebase และ git history เพื่อจัดลำดับความสำคัญในการทดสอบด้วย Risk-based Testing (Impact × Likelihood) — ตอบคำถาม "ควร test อะไรก่อน?"                          |
-| [`swe-test-engineer`](skills/swe-test-engineer/SKILL.md)       | วิเคราะห์ requirements และสร้าง test cases ด้วย Boundary Value Analysis (BVA), Equivalence Partitioning (EP) และเทคนิคอื่นๆ — รองรับทั้ง business users และ technical users |
+| [`swe-test-planner`](skills/swe-test-planner/SKILL.md)               | สแกน codebase และ git history เพื่อจัดลำดับความสำคัญในการทดสอบด้วย Risk-based Testing (Impact × Likelihood) — ตอบคำถาม "ควร test อะไรก่อน?"                          |
+| [`swe-test-engineer`](skills/swe-test-engineer/SKILL.md)             | วิเคราะห์ requirements และสร้าง test cases ด้วย Boundary Value Analysis (BVA), Equivalence Partitioning (EP) และเทคนิคอื่นๆ — รองรับทั้ง business users และ technical users |
+| [`swe-ts-unit-test-writer`](skills/swe-ts-unit-test-writer/SKILL.md) | คู่มือเขียน unit test คุณภาพสูงสำหรับ TypeScript (Jest/Vitest) — ครอบคลุม AAA pattern, FIRST principles, mocking, naming conventions และ anti-patterns |
 
 ---
 
@@ -199,6 +200,15 @@ AI Agent จะดึงคู่มือ (Skills) เหล่านี้ไ�
     - _"สร้าง test cases จาก requirement"_
     - _"ออกแบบชุดทดสอบสำหรับฟีเจอร์นี้"_
 
+- **`swe-ts-unit-test-writer`**
+  - **ทำงานเมื่อ:** ต้องการเขียน unit test code จริง (.test.ts / .spec.ts) สำหรับ TypeScript project
+  - **คีย์เวิร์ดที่ใช้ถาม:**
+    - _"เขียน unit test ให้ function นี้"_
+    - _"สร้าง test file สำหรับ service นี้"_
+    - _"เพิ่ม test coverage ให้ module นี้"_
+    - _"write unit tests for this TypeScript module"_
+    - _"refactor tests ให้ตาม best practices"_
+
 ---
 
 ## 📂 โครงสร้างโปรเจกต์
@@ -260,7 +270,10 @@ agent-skills-choonewza/
     ├── swe-test-engineer/
     │   ├── SKILL.md
     │   └── references/
-    └── swe-test-planner/
+    ├── swe-test-planner/
+    │   ├── SKILL.md
+    │   └── references/
+    └── swe-ts-unit-test-writer/
         ├── SKILL.md
         └── references/
 ```
@@ -299,6 +312,7 @@ npx skills add https://github.com/choonewza-pro/agent-skills-choonewza --skill s
 npx skills add https://github.com/choonewza-pro/agent-skills-choonewza --skill swe-review-architecture-project
 npx skills add https://github.com/choonewza-pro/agent-skills-choonewza --skill swe-test-engineer
 npx skills add https://github.com/choonewza-pro/agent-skills-choonewza --skill swe-test-planner
+npx skills add https://github.com/choonewza-pro/agent-skills-choonewza --skill swe-ts-unit-test-writer
 ```
 
 หรือ copy โฟลเดอร์ skill ที่ต้องการไปไว้ใน `.agent/skills/` ของโปรเจกต์เป้าหมายโดยตรง
