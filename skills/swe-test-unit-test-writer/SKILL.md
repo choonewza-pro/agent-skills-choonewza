@@ -1,5 +1,5 @@
 ---
-name: swe-ts-unit-test-writer
+name: swe-test-unit-test-writer
 description: >
   Guides AI agents to write high-quality TypeScript unit tests using Jest or
   Vitest. Covers Arrange-Act-Assert pattern, FIRST principles, scenario design
@@ -263,7 +263,7 @@ If tests fail, fix them. Do NOT submit tests that you haven't verified pass.
 ```
 swe-test-planner           → "ควร test อะไรก่อน?"      (Risk-based prioritization)
 swe-test-engineer          → "ต้องมี test case อะไร?"   (BVA/EP/STT → test case tables)
-swe-ts-unit-test-writer    → "เขียน .test.ts ยังไง?"    (Actual test code) ← YOU ARE HERE
+swe-test-unit-test-writer  → "เขียน .test.ts ยังไง?"    (Actual test code) ← YOU ARE HERE
 ```
 
 If the user has output from `swe-test-engineer` (test case tables with TC-01, BT-01, etc.),
