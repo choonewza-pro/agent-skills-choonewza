@@ -4,58 +4,84 @@ Good test names communicate business rules — not implementation details.
 
 ---
 
-## Format
+## Recommended Formats
+
+### 1. Modern Standard (Active Present Tense — Recommended)
 
 ```
-should <expected behavior> when <condition/scenario>
+<verb in present tense> <expected outcome> [when / if / for <condition>]
 ```
 
-The test name must answer: **"What does the system do in this situation?"**
+Reads naturally with `it(...)` as a factual guarantee ("It returns...", "It throws..."):
+```typescript
+it('returns formatted price for USD')
+it('returns 0 for an empty cart')
+it('throws InvalidEmailError if email format is invalid')
+it('caps discount at 50% when role + coupon exceeds limit')
+```
+
+### 2. Adaptive Rule: Respect Existing Conventions
+
+If the existing codebase consistently uses BDD-style `should ... when ...`, follow the repository's convention:
+```typescript
+it('should return 0 when cart is empty')
+```
 
 ---
 
-## Rules
+## Key Principles
 
-### 1. Use Business Language
+### 1. Name for CI Diagnostics
+เวลาที่ Test Fail ใน CI ชื่อ Test ต้องบอกทันทีว่า **"Behavior ไหนเสีย"** โดยไม่ต้องคลิกเข้าไปดู implementation:
 
+| ❌ หลีกเลี่ยง (คลุมเครือ / Implementation) | ✅ แนะนำ (บอก Behavior ชัดเจน) |
+|---|---|
+| `works correctly` | `returns formatted price for USD` |
+| `handles edge case` | `returns 0 for an empty cart` |
+| `calls Intl correctly` | `formats negative amount with leading minus sign` |
+| `test 1` | `throws InvalidEmailError if email format is invalid` |
+
+---
+
+### 2. The "And Smell" Heuristic (One Behavior Per Test)
+
+> **กฎเช็คเร็ว:** ถ้าชื่อ Test มีคำว่า **"and"** หลายครั้ง แสดงว่ากำลังตรวจหลายเรื่องใน Test เดียว ให้แยก Test ทันที!
+
+```typescript
+// ❌ Anti-pattern — ตรวจหลาย behavior ใน test เดียว
+it('formats price and handles errors and logs result', () => { ... })
+
+// ✅ แนะนำ — แยก 1 test ต่อ 1 behavior ชัดเจน
+it('formats USD price correctly', () => { ... })
+it('throws when currency is invalid', () => { ... })
+it('logs formatting error', () => { ... })
+```
+
+---
+
+### 3. Use Business Language
 ```typescript
 // ✅ Good — reads like a business rule
-it('should reject checkout when cart is empty')
-it('should apply 20% discount for VIP users')
-it('should lock account after 5 failed login attempts')
-it('should send confirmation email when order is placed')
+it('rejects checkout when cart is empty')
+it('applies 20% discount for VIP users')
+it('locks account after 5 failed login attempts')
 
-// ❌ Bad — describes implementation
-it('test case 1')
-it('should work')
-it('should call service.process')
-it('should return true')
-it('handles the thing')
+// ❌ Bad — describes implementation details
+it('calls repository.save')
+it('sets local state variable to true')
 ```
 
-### 2. Include the Condition
+---
 
+### 4. Include the Condition & Be Specific
 ```typescript
-// ✅ Good — condition is explicit
-it('should throw InvalidPriceError when price is negative')
-it('should return empty array when no products match filter')
-it('should cap discount at 50% when role + coupon exceeds limit')
+// ✅ Good — condition and outcome are explicit
+it('throws InvalidPriceError when price is negative')
+it('returns empty array when no products match filter')
 
-// ❌ Bad — condition is missing
-it('should throw error')      // which error? when?
-it('should return results')   // what results? under what condition?
-```
-
-### 3. Be Specific About Expected Behavior
-
-```typescript
-// ✅ Good — specific outcome
-it('should set order status to "pending" when payment is processing')
-it('should return finalPrice of 800 when VIP buys 1000 item')
-
-// ❌ Bad — vague outcome
-it('should handle payment')   // handle how?
-it('should process order')    // process to what state?
+// ❌ Bad — condition or outcome is missing
+it('throws error')      // which error? when?
+it('returns results')   // what results? under what condition?
 ```
 
 ---

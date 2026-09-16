@@ -6,9 +6,28 @@ Think scenarios BEFORE writing code — not the other way around.
 
 ## Core Principle
 
-> เริ่มจาก **behavior** ที่ผู้ใช้หรือ business คาดหวัง ไม่ใช่เริ่มจาก line of code
+> การเขียน Test ที่ดีไม่ได้เริ่มจาก API ของ Testing Framework แต่เริ่มจากการ **เข้าใจ Behavior และ Contract ที่ระบบต้องรับประกัน**
 >
-> คิด happy path, negative path, edge case และ boundary case **ก่อนเขียนแม้แต่ test แรก**
+> ก่อนเขียน test ให้ถามเสมอว่า: **"ฟังก์ชันหรือโมดูลนี้รับประกันอะไร?"**
+>
+> Contract มักประกอบด้วย 4 ส่วน:
+> 1. **Input:** ข้อมูลที่รับเข้ามาและชนิดของข้อมูล
+> 2. **Output:** ค่าที่ส่งกลับเมื่อทำงานสำเร็จ
+> 3. **Side Effect:** การเปลี่ยนแปลงภายนอก เช่น การเรียก external service, logging, DB
+> 4. **Error:** กรณีที่ต้อง throw หรือ reject เมื่อเกิดข้อผิดพลาด
+
+### Example: Contract Analysis (`formatPrice`)
+
+```typescript
+function formatPrice(amount: number, currency: string): string
+```
+
+- **Contract Guarantee:**
+  - `(10, 'USD')` → `'$10.00'` (Happy path)
+  - `(10, 'EUR')` → `'€10.00'` (Multi-currency support)
+  - `(0, 'USD')` → `'$0.00'` (Zero boundary)
+  - `(-5.5, 'USD')` → `'-$5.50'` (Negative amount formatting)
+  - `(10.999, 'USD')` → `'$11.00'` (Decimal rounding guarantee)
 
 ---
 
@@ -83,6 +102,23 @@ it('should create order with multiple items', () => { ... })         // happy pa
 it('should reject order with empty items', () => { ... })            // negative
 it('should reject order with item qty 0', () => { ... })             // boundary invalid
 ```
+
+### Representative Value Selection (`parseAge`)
+
+เมื่อต้องทดสอบ validation ที่มีช่วงค่า เช่น `parseAge(input: unknown): number` (อนุญาต 0 ถึง 150):
+**ไม่จำเป็นต้อง test ทุกค่า** แต่เลือกค่าที่เป็นตัวแทนของแต่ละกลุ่ม:
+
+- `25` → Valid normal (Happy Path)
+- `25.9` → Floor coercion (ปัดเศษทศนิยมเหลือ 25)
+- `0` → Valid min boundary
+- `150` → Valid max boundary
+- `-1` → Invalid below min (Error path)
+- `151` → Invalid above max (Error path)
+- `'abc'` → Malformed input (Error path)
+- `''` → Empty input (Edge case)
+
+> 💡 **การคำนวณและกำหนดค่า Test Data อย่างเป็นระบบ:**
+> สำหรับรายละเอียดเชิงลึกในการคำนวณค่าขอบเขต (BVA), การแบ่ง Equivalence Partitioning (EP) และสถานะ (STT) ให้ศึกษาและใช้งานสกิล [`swe-test-engineer`](../../swe-test-engineer/SKILL.md)
 
 ---
 

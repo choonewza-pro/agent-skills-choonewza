@@ -7,9 +7,16 @@ Common mistakes that make unit tests fragile, misleading, or useless.
 ## 1. Testing Implementation Details
 
 **Problem:** Test breaks when you refactor internals, even though behavior is unchanged.
+- ไม่จำเป็นต้อง test ว่า function เรียก internal API แบบไหน
+- **ห้าม test intermediate variable** (ตัวแปรภายในระหว่างทางของ implementation)
+- ไม่ควรผูก test กับโครงสร้างหรือ private methods ภายในมากเกินไป
+
+> 💡 **The Refactor Litmus Test (คำถามเช็คเด็ด):**
+> *"ถ้าเรา Refactor Implementation ภายใน แต่ Output และ Behavior ภายนอกยังเหมือนเดิมทุกประการ Test นี้ควร Fail หรือไม่?"*
+> - ถ้าคำตอบคือ **"Fail"** → แสดงว่ากำลัง Test Implementation Detail ไม่ใช่ Behavior! Test ที่ดีต้องยังคงผ่าน (Green) ตราบใดที่ Contract ยังเหมือนเดิม
 
 ```typescript
-// ❌ Anti-pattern — asserting on internal method calls
+// ❌ Anti-pattern — asserting on internal method calls & intermediate variables
 it('should call repository.save with correct data', async () => {
   await createOrder(items, 'user-1')
   
@@ -22,8 +29,8 @@ it('should call repository.save with correct data', async () => {
   })
 })
 
-// ✅ Better — assert on the behavior / output
-it('should return order with confirmed status', async () => {
+// ✅ Better — assert on the behavior / output / contract
+it('returns order with confirmed status', async () => {
   const order = await createOrder(items, 'user-1')
   
   expect(order.status).toBe('confirmed')
@@ -31,7 +38,7 @@ it('should return order with confirmed status', async () => {
 })
 ```
 
-**Rule of thumb:** If you rename an internal variable and the test breaks, you're testing implementation.
+**Rule of thumb:** If you rename an internal variable or refactor internal steps and the test breaks, you're testing implementation.
 
 ---
 
@@ -102,6 +109,19 @@ it('should set status to shipped after shipping', async () => {
   const shipped = await shipOrder('order-1')
   expect(shipped.status).toBe('shipped')
 })
+```
+
+### The "And Smell" in Test Names
+สังเกตง่ายๆ จากชื่อ Test: ถ้าชื่อ Test มีคำว่า **"and"** หลายครั้ง มักเป็นสัญญาณว่ากำลังตรวจหลายเรื่องใน Test เดียว
+
+```typescript
+// ❌ Anti-pattern — มี "and" หลายคำ รวมหลาย behavior
+it('formats price and handles errors and logs result', () => { ... })
+
+// ✅ Better — แยกเป็น 1 test ต่อ 1 behavior
+it('formats USD price correctly', () => { ... })
+it('throws when currency is invalid', () => { ... })
+it('logs formatting error', () => { ... })
 ```
 
 ---

@@ -7,7 +7,19 @@ Comprehensive coverage requires testing all paths — not just the happy path.
 ## Overview
 
 > Test ที่ดีต้องไม่ทดสอบแค่ทางสำเร็จ
+> การเขียน Test ที่ดีไม่ได้เริ่มจาก API ของ Testing Framework แต่เริ่มจากการ **เข้าใจ Behavior และ Contract ที่ระบบต้องรับประกัน**
 > สำหรับองค์กร **Negative/Error case มักมีมูลค่าสูง** เพราะช่วยลด incident ใน production
+
+### Contract Testing: Input, Output, Side Effect, Error
+ก่อนเขียน test ให้ถามว่าฟังก์ชันหรือโมดูลนี้ **"รับประกันอะไร"** เช่น `formatPrice(amount, currency)`:
+- **Input:** `amount` (number), `currency` (string)
+- **Output:** formatted price string
+- **Guarantees (Test Cases):**
+  - `(10, 'USD')` → `'$10.00'` (Happy path)
+  - `(10, 'EUR')` → `'€10.00'` (Different currency)
+  - `(0, 'USD')` → `'$0.00'` (Zero boundary)
+  - `(-5.5, 'USD')` → `'-$5.50'` (Negative amount)
+  - `(10.999, 'USD')` → `'$11.00'` (Decimal rounding)
 
 ---
 
@@ -127,6 +139,23 @@ describe('age validation (min: 18, max: 60)', () => {
 ```
 
 **Coverage goal:** For every numeric/date boundary, test: min-1, min, min+1, max-1, max, max+1.
+
+### Representative Boundary & Edge Values (`parseAge`)
+
+> **กฎสำคัญ:** ไม่จำเป็นต้อง Test ทุกค่า แต่ให้เลือกค่าที่เป็น **ตัวแทน (Representative Values)** ของ Boundary และ Error Path
+
+สมมติฟังก์ชัน `parseAge(input)` ที่รับอายุ 0 ถึง 150 ปี:
+
+| Input | ประเภท | ผลลัพธ์ที่คาดหวัง | เหตุผลที่เป็นตัวแทน |
+|---|---|---|---|
+| `25` | Valid Normal | `25` | ตัวแทน Happy Path ปกติ |
+| `25.9` | Float coercion | `25` (floor) | ตรวจการปัดเศษทศนิยม |
+| `0` | Min boundary | `0` | ค่าต่ำสุดที่อนุญาต (Valid Boundary) |
+| `150` | Max boundary | `150` | ค่าสูงสุดที่อนุญาต (Valid Boundary) |
+| `-1` | Below min | throws error | ขอบล่างที่หลุดช่วง (Invalid) |
+| `151` | Above max | throws error | ขอบบนที่หลุดช่วง (Invalid) |
+| `'abc'` | Invalid type | throws error | ข้อมูลที่ไม่ใช่ตัวเลข (Malformed) |
+| `''` | Empty string | throws error | ข้อมูลว่างเปล่า (Edge Case) |
 
 ---
 
