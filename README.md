@@ -11,7 +11,7 @@ npx skills add https://github.com/choonewza-pro/agent-skills-choonewza
 
 ## 📦 Skills ทั้งหมด
 
-โฟลเดอร์ `skills/` มี **19 skills** แบ่งตามหมวดหมู่:
+โฟลเดอร์ `skills/` มี **20 skills** แบ่งตามหมวดหมู่:
 
 ### 🔧 Development & Deployment
 
@@ -48,9 +48,10 @@ npx skills add https://github.com/choonewza-pro/agent-skills-choonewza
 
 ### 🧪 QA & Testing
 
-| Skill                                                    | คำอธิบาย                                                                                                                                 |
-| :------------------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------- |
-| [`swe-test-engineer`](skills/swe-test-engineer/SKILL.md) | วิเคราะห์ requirements และสร้าง test cases ด้วย Boundary Value Analysis (BVA), Equivalence Partitioning (EP) และเทคนิคอื่นๆ — รองรับทั้ง business users และ technical users |
+| Skill                                                          | คำอธิบาย                                                                                                                                                              |
+| :------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [`swe-test-planner`](skills/swe-test-planner/SKILL.md)         | สแกน codebase และ git history เพื่อจัดลำดับความสำคัญในการทดสอบด้วย Risk-based Testing (Impact × Likelihood) — ตอบคำถาม "ควร test อะไรก่อน?"                          |
+| [`swe-test-engineer`](skills/swe-test-engineer/SKILL.md)       | วิเคราะห์ requirements และสร้าง test cases ด้วย Boundary Value Analysis (BVA), Equivalence Partitioning (EP) และเทคนิคอื่นๆ — รองรับทั้ง business users และ technical users |
 
 ---
 
@@ -180,6 +181,16 @@ AI Agent จะดึงคู่มือ (Skills) เหล่านี้ไ�
 
 ### 🧪 QA & Testing
 
+- **`swe-test-planner`**
+  - **ทำงานเมื่อ:** ต้องการรู้ว่าควร test อะไรก่อน หรือต้องการวางแผนการทดสอบจาก codebase จริง
+  - **คีย์เวิร์ดที่ใช้ถาม:**
+    - _"ควร test อะไรก่อนในโปรเจกต์นี้"_
+    - _"scan codebase แล้วบอกว่า feature ไหน risk สูง"_
+    - _"เรามีเวลาจำกัด test อะไรก่อนดี"_
+    - _"จัดลำดับความสำคัญการทดสอบ"_
+    - _"วิเคราะห์ความเสี่ยงก่อนทดสอบ"_
+    - _"give me a risk-based test plan"_
+
 - **`swe-test-engineer`**
   - **ทำงานเมื่อ:** ต้องการวิเคราะห์ requirements และสร้าง test cases อย่างเป็นระบบ
   - **คีย์เวิร์ดที่ใช้ถาม:**
@@ -246,8 +257,12 @@ agent-skills-choonewza/
     │   └── SKILL.md
     ├── swe-scrutinize/
     │   └── SKILL.md
-    └── swe-test-engineer/
-        └── SKILL.md
+    ├── swe-test-engineer/
+    │   ├── SKILL.md
+    │   └── references/
+    └── swe-test-planner/
+        ├── SKILL.md
+        └── references/
 ```
 
 ---
@@ -283,6 +298,7 @@ npx skills add https://github.com/choonewza-pro/agent-skills-choonewza --skill s
 npx skills add https://github.com/choonewza-pro/agent-skills-choonewza --skill swe-mcp-server-development
 npx skills add https://github.com/choonewza-pro/agent-skills-choonewza --skill swe-review-architecture-project
 npx skills add https://github.com/choonewza-pro/agent-skills-choonewza --skill swe-test-engineer
+npx skills add https://github.com/choonewza-pro/agent-skills-choonewza --skill swe-test-planner
 ```
 
 หรือ copy โฟลเดอร์ skill ที่ต้องการไปไว้ใน `.agent/skills/` ของโปรเจกต์เป้าหมายโดยตรง
