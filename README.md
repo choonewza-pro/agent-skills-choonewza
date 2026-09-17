@@ -16,7 +16,7 @@ npx skills update
 
 ## 📦 Skills ทั้งหมด
 
-โฟลเดอร์ `skills/` มี **22 skills** แบ่งตามหมวดหมู่:
+โฟลเดอร์ `skills/` มี **23 skills** แบ่งตามหมวดหมู่:
 
 ### 🔧 Development & Deployment
 
@@ -59,6 +59,7 @@ npx skills update
 | [`swe-test-engineer`](skills/swe-test-engineer/SKILL.md)             | วิเคราะห์ requirements และสร้าง test cases ด้วย Boundary Value Analysis (BVA), Equivalence Partitioning (EP) และเทคนิคอื่นๆ — รองรับทั้ง business users และ technical users |
 | [`swe-test-unit-test-writer`](skills/swe-test-unit-test-writer/SKILL.md) | คู่มือเขียน unit test คุณภาพสูงสำหรับ TypeScript (Jest/Vitest) — ครอบคลุม AAA pattern, FIRST principles, mocking, naming conventions และ anti-patterns |
 | [`swe-test-integration-test-writer`](skills/swe-test-integration-test-writer/SKILL.md) | คู่มือเขียน integration test สำหรับ TypeScript (API, Database, Messaging) — ครอบคลุม Testcontainers, DB lifecycle, Supertest, MSW และ anti-patterns |
+| [`swe-test-e2e-playwright`](skills/swe-test-e2e-playwright/SKILL.md) | คู่มือเขียน End-to-End (E2E) test สำหรับเว็บแอปด้วย Playwright (TypeScript) — ครอบคลุม Resilient locators, Web-first assertions, Page Object Model (POM), storageState, และ Trace Viewer |
 
 ---
 
@@ -224,6 +225,15 @@ AI Agent จะดึงคู่มือ (Skills) เหล่านี้ไ�
     - _"write integration tests for our backend"_
     - _"แก้ปัญหา integration test ค้างหรือ flaky"_
 
+- **`swe-test-e2e-playwright`**
+  - **ทำงานเมื่อ:** ต้องการเขียน End-to-End (E2E) test บนเบราว์เซอร์จริงด้วย Playwright (.spec.ts)
+  - **คีย์เวิร์ดที่ใช้ถาม:**
+    - _"เขียน E2E test ให้ flow นี้หน่อย"_
+    - _"สร้าง Playwright test สำหรับหน้าเว็บ"_
+    - _"ทดสอบ flow checkout / shopping cart ด้วย Playwright"_
+    - _"setup Playwright และเขียน Page Object Model (POM)"_
+    - _"แก้ปัญหา test flaky หรือดู Trace Viewer ของ Playwright"_
+
 ---
 
 ## 📂 โครงสร้างโปรเจกต์
@@ -291,7 +301,10 @@ agent-skills-choonewza/
     ├── swe-test-unit-test-writer/
     │   ├── SKILL.md
     │   └── references/
-    └── swe-test-integration-test-writer/
+    ├── swe-test-integration-test-writer/
+    │   ├── SKILL.md
+    │   └── references/
+    └── swe-test-e2e-playwright/
         ├── SKILL.md
         └── references/
 ```
@@ -332,6 +345,7 @@ npx skills add https://github.com/choonewza-pro/agent-skills-choonewza --skill s
 npx skills add https://github.com/choonewza-pro/agent-skills-choonewza --skill swe-test-planner
 npx skills add https://github.com/choonewza-pro/agent-skills-choonewza --skill swe-test-unit-test-writer
 npx skills add https://github.com/choonewza-pro/agent-skills-choonewza --skill swe-test-integration-test-writer
+npx skills add https://github.com/choonewza-pro/agent-skills-choonewza --skill swe-test-e2e-playwright
 ```
 
 หรือ copy โฟลเดอร์ skill ที่ต้องการไปไว้ใน `.agent/skills/` ของโปรเจกต์เป้าหมายโดยตรง
