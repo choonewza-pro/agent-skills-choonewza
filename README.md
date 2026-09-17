@@ -4,6 +4,11 @@
 npx skills add https://github.com/choonewza-pro/agent-skills-choonewza
 ```
 
+```bash
+# อัปเดต skills ทั้งหมดให้เป็นเวอร์ชันล่าสุด
+npx skills update
+```
+
 > ชุดคู่มือ `SKILL.md` สำหรับ AI agent ที่ทำงานร่วมกับโค้ดและกระบวนการพัฒนาในโปรเจกต์ Next.js  
 > ออกแบบมาให้ agent อ่านแล้วปฏิบัติตามได้ทันที — ไม่ต้องเดา ไม่ต้องถาม
 
@@ -330,6 +335,20 @@ npx skills add https://github.com/choonewza-pro/agent-skills-choonewza --skill s
 ```
 
 หรือ copy โฟลเดอร์ skill ที่ต้องการไปไว้ใน `.agent/skills/` ของโปรเจกต์เป้าหมายโดยตรง
+
+---
+
+## 🔄 วิธีอัปเดต Skills
+
+เมื่อมีการปรับปรุงหรือเพิ่ม skill ใหม่ใน repo สามารถอัปเดต skills ในโปรเจกต์ของคุณได้ง่ายๆ ด้วยคำสั่ง:
+
+```bash
+# อัปเดต skills ทั้งหมดเป็นเวอร์ชันล่าสุด
+npx skills update
+
+# หรืออัปเดตแบบไม่ต้องรอ prompt ถาม (-y)
+npx skills update -y
+```
 
 ---
 
