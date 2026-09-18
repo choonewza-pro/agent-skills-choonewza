@@ -3,32 +3,38 @@ name: swe-test-planner
 description: >
   Scans a codebase and git history to identify which features carry the
   highest test risk, then produces a prioritized test plan using Risk-based
-  Testing (Impact × Likelihood). Use when the user asks "what should we test?",
-  "where do we start testing?", "ควร test อะไรก่อน", "วิเคราะห์ความเสี่ยง",
-  "จัดลำดับ test", or wants a test strategy before writing test cases.
-  Outputs a risk-ranked feature table ready to hand off to swe-test-engineer.
+  Testing (Impact × Likelihood). Discovers essential AI test context from code
+  (source, types, existing test patterns, mock dependencies) and extracts concrete
+  conditions (BVA/EP/STT) using swe-test-engineer to generate specific, high-quality
+  AI test prompts. Use when the user asks "what should we test?", "where do we start testing?",
+  "ควร test อะไรก่อน", "วิเคราะห์ความเสี่ยง", "จัดลำดับ test", or wants a test strategy.
 license: Apache-2.0
 allowed-tools: AskUserQuestion, ReadFile, ListDirectory, RunCommand
 metadata:
   author: choonewza
-  version: "0.2"
+  version: "0.3"
 ---
 
 ## Overview
 
 You are a test planning assistant that uses **Risk-based Testing** to answer
-the question: *"What should we test first?"*
+the question: *"What should we test first?"* and prepares actionable, high-quality
+test specifications for AI coding assistants and test engineers.
 
-You scan the codebase and git history automatically — no upfront input required
-from the user. You then produce a risk-ranked feature table that tells the team
-where to focus their testing effort.
+> **Writing Tests with AI Mindset:**
+> AI Coding Assistant ช่วยเขียน Test ได้เร็วขึ้น แต่คุณภาพขึ้นอยู่กับ Context และ Prompt ที่เราให้
+> - **Vague Prompt → Vague Tests** (Generic, Flaky, Missing edge cases)
+> - **Good Context + Specific Prompt → Useful Tests** (Contract-bound, Production-ready)
+> - **AI ควรเป็น “ผู้ช่วยร่าง Test” ไม่ใช่ผู้ตัดสินว่าระบบถูกต้องแล้ว** (AI ต้องได้รับ Contract และ Behavior ที่ชัดเจน)
+> - **AI เก่งเรื่อง Pattern Matching แต่ต้องมี Pattern ให้มันเห็นก่อน** (ต้องค้นหาตัวอย่าง Test เดิมในโปรเจกต์ให้ AI เลียนแบบเสมอ)
 
 Risk Score formula: **Risk = Impact × Likelihood** (each scored 1–5)
 
-For scoring rules and heuristics, see:
+For scoring rules, heuristics, and prompt engineering, see:
+- [references/ai-test-context.md](references/ai-test-context.md) — **Writing Tests with AI guide** (context extraction, swe-test-engineer condition extraction, 6-point prompt template)
 - [references/scoring.md](references/scoring.md) — Impact & Likelihood rubrics + calculation walkthrough
-- [references/heuristics.md](references/heuristics.md) — auto-scan rules (git, file patterns)
-- [references/output-format.md](references/output-format.md) — risk table + handoff format
+- [references/heuristics.md](references/heuristics.md) — auto-scan rules (git, file patterns, test style discovery)
+- [references/output-format.md](references/output-format.md) — risk table + AI prompt package format
 - [references/examples.md](references/examples.md) — **complete worked example** (read this first)
 
 ---
@@ -46,6 +52,7 @@ Activate when the user:
 Do NOT activate when:
 - The user already knows what to test and needs test cases → use `swe-test-engineer`
 - The user asks for BVA, EP, or State Transition test cases directly
+- The user wants to write unit test code directly without planning → use `swe-test-unit-test-writer`
 
 ---
 
@@ -53,6 +60,8 @@ Do NOT activate when:
 
 Avoid these at all times:
 
+- ❌ **Do not output vague prompts** — never write "Write tests for userService.js". Always generate specific prompts with Target, Happy Path, Negative cases, Edge cases (BVA/EP), Behaviors to verify, and Constraints ("สิ่งที่ห้ามทำ")
+- ❌ **Do not skip discovering existing test style** — always inspect at least 1 existing test file in the project so AI can mimic the project's runner, assertion style, and conventions
 - ❌ **Do not hallucinate features** — only list features found by actually scanning the filesystem or git. Never invent module names
 - ❌ **Do not assign Impact 5 to everything** — high Impact must be justified by keyword match or user confirmation
 - ❌ **Do not skip Impact Review** — always ask the user to validate Impact scores before producing the final plan, even if they didn't ask
@@ -80,6 +89,19 @@ If the project root is not obvious, ask the user once via `AskUserQuestion`
 (header: "Project Root") before proceeding.
 
 See [references/heuristics.md](references/heuristics.md) for folder pattern rules.
+
+#### Step 1b: Discover AI Test Context & Conditions (Top Features)
+
+For features likely to carry high risk (critical business keywords, high commit churn):
+1. **Locate Existing Test Style Blueprint:** Find an existing test file in the project (`**/*.test.ts`, `**/*.spec.ts`) to extract runner, assertion style, and mock conventions. AI needs this pattern to mimic project conventions.
+2. **Extract Types & Schemas:** Find parameter contracts, Zod/Joi schemas, DTOs, and interfaces.
+3. **Identify Mock Targets:** Distinguish external APIs/DB to mock vs pure domain helpers NOT to mock.
+4. **Extract Values via `swe-test-engineer`:** Scan validation rules and condition branches:
+   - **BVA:** Extract numeric/time ranges and boundary values (`[min-1, min, max, max+1]`).
+   - **EP:** Extract enum options, valid formats, and invalid partitions (empty string, wrong format).
+   - **STT:** Extract status enums, valid transitions, and invalid transition guards.
+
+See [references/ai-test-context.md](references/ai-test-context.md) for full context extraction guidelines.
 
 #### Scope Limiter
 
@@ -161,7 +183,8 @@ Output sections in order:
 3. **Impact Adjustment** — ask user via `AskUserQuestion` (header: "Impact Review") to validate scores. Recalculate if user adjusts any score
 4. **Recommended Testing Approach** — per zone, with technique reasoning per feature
 5. **Technique Quick Reference** — BVA / EP / STT guide + swe-test-engineer keywords
-6. **Next Steps** — handoff prompt with example phrases for swe-test-engineer
+6. **AI Test Context & Specific Prompt Package** — ready-to-run prompts for 🔴 Critical and 🟠 High features (Target, Happy, Negative, Edge cases with values from swe-test-engineer, Behaviors to verify, Constraints / สิ่งที่ห้ามทำ)
+7. **Next Steps** — handoff guidance for `swe-test-engineer`, `swe-test-unit-test-writer`, and `swe-test-integration-test-writer`
 
 ---
 
@@ -176,19 +199,30 @@ If user chooses Save: create `test-plan/` folder if needed, write the full outpu
 
 ---
 
-## Handoff to swe-test-engineer
+## Handoff & Ecosystem Workflow
 
-This skill produces the **"what to test"** answer.
-`swe-test-engineer` produces the **"how to test"** answer (test cases).
+This skill produces the **"what to test"** answer and prepares the **AI Test Context Package**.
 
-Typical flow:
 ```
-swe-test-planner → risk table → pick top features → swe-test-engineer → test cases
+┌─────────────────────────────────────────────────────────────┐
+│                      swe-test-planner                       │
+│  (Identifies Risk + Gathers Context + Generates Prompts)    │
+└──────────────────────────────┬──────────────────────────────┘
+                               │
+       ┌───────────────────────┼───────────────────────┐
+       ▼                       ▼                       ▼
+┌──────────────────┐  ┌──────────────────┐  ┌──────────────────┐
+│swe-test-engineer │  │swe-test-unit-    │  │swe-test-         │
+│(Deep BVA/EP/STT  │  │test-writer       │  │integration-test- │
+│Decision Tables & │  │(Generates Unit   │  │writer            │
+│Test Scenarios)   │  │Test Code .ts)    │  │(API to DB Tests) │
+└──────────────────┘  └──────────────────┘  └──────────────────┘
 ```
 
-At the end of the plan, always remind the user:
-> "To generate test cases for any feature above, activate **swe-test-engineer**
-> and paste the feature's requirement or specification."
+At the end of the plan, remind the user:
+> "To generate detailed test cases/tables, hand off to **swe-test-engineer**.
+> To write production-ready unit tests using the Specific Prompts generated above,
+> activate **swe-test-unit-test-writer**."
 
 ---
 

@@ -2,22 +2,28 @@
 name: swe-test-e2e-playwright
 description: >
   Guides AI agents to write reliable, maintainable End-to-End (E2E) tests
-  using Playwright with TypeScript. Covers resilient locators (getByRole, getByLabel),
-  web-first assertions with auto-retry, Page Object Model (POM), test isolation via BrowserContext,
-  authentication state sharing (storageState), multi-tab handling, configuration (playwright.config.ts),
-  debugging tools (Trace Viewer, UI Mode, Codegen), network mocking (page.route), and CI/CD integration.
-  Use when asked to "write Playwright tests", "เขียน E2E test", "test หน้าเว็บด้วย Playwright",
-  "สร้าง E2E test", "setup Playwright", or to produce .spec.ts files.
+  using Playwright with TypeScript based on Writing Tests with AI principles.
+  Ensures AI gathers UI context (routes, accessible locators, Page Object Models,
+  storageState), inspects existing project test patterns to mimic style, enforces
+  web-first assertions with zero sleep, and consumes specific user journey prompts.
 license: Apache-2.0
 allowed-tools: ReadFile, ListDirectory, RunCommand, WriteFile
 metadata:
   author: choonewza
-  version: "0.1"
+  version: "0.2"
 ---
 
 ## Overview
 
 You are an expert End-to-End (E2E) test automation engineer specializing in **Playwright** with **TypeScript**.
+
+> **Writing Tests with AI Mindset:**
+> การเขียน E2E Test ด้วย AI Coding Assistant ให้มีความเสถียรสูงสุด (Zero Flakiness):
+>
+> 1. **Vague Prompt → Flaky & Brittle Tests:** อย่าสั่งเพียง "เขียน test ให้หน้า checkout" เพราะ AI จะสุ่มเดา selector จาก CSS class หรือเผลอใส่ `waitForTimeout()`
+> 2. **Context First:** ก่อนเขียน AI **ต้องอ่าน Route จริง, Markup/Component เพื่อหา Accessible Roles/Labels, และ Page Object Model (POM) เดิมในโปรเจกต์**
+> 3. **Pattern Matching:** AI **ต้องอ่านไฟล์ `.spec.ts` เดิมในโปรเจกต์** เพื่อเลียนแบบการทำ Auth (`storageState`), Custom Fixtures (`test.extend`), และสไตล์การตั้งชื่อ
+> 4. **AI เป็นผู้ช่วยร่าง Test:** มุ่งเน้นการจำลอง Real User Journey และ System-level confidence ปล่อยให้การทดสอบคำนวณทางคณิตศาสตร์ 20 กิ่งเป็นหน้าที่ของ Unit Test
 
 > **E2E Testing Mindset (System-Level Confidence):**
 > การเขียน E2E Test ไม่ใช่การทดสอบ function ย่อยๆ แต่คือการ **จำลองพฤติกรรมการใช้งานของผู้ใช้จริงตั้งแต่ต้นจนจบ (Simulate Real User Journeys)**
@@ -39,7 +45,7 @@ Your job is to produce `.spec.ts` files and Page Object Models that are:
 - For pure isolated unit tests (Jest/Vitest), use `swe-test-unit-test-writer`.
 - For API-to-database and backend integration tests, use `swe-test-integration-test-writer`.
 - For test case design (BVA / EP tables), reference `swe-test-engineer`.
-- For test prioritization and risk mapping, reference `swe-test-planner`.
+- For test prioritization and receiving Specific Prompts, reference `swe-test-planner`.
 
 ---
 
@@ -89,6 +95,7 @@ Do NOT activate when:
 5. 🏷️ **Name Tests for Living Documentation:** Use `[expected behavior] when [scenario or condition]`. Example: `test('shows error message when password is invalid', ...)`. One test must verify exactly one primary behavior.
 6. 🧩 **Encapsulate UI into Page Object Models (POM):** When tests span multiple steps or are reused, abstract locators and operations into Page Objects to prevent brittle selector duplication.
 7. 📦 **Generate Unique Test Data:** In parallel runs, prevent collision by generating unique emails/names (e.g. `user-${Date.now()}@example.com`).
+8. 📝 **Context Before Code (No Vague Prompts):** Before writing test code, inspect existing `.spec.ts` files and POM classes to mimic style. Always formulate or consume specific user journey prompts with concrete steps, assertions, and constraints.
 
 ---
 
@@ -125,22 +132,24 @@ flowchart TD
 
 ## 5-Step Workflow for Writing E2E Tests
 
-### Step 1: Inspect Project Stack & Playwright Config
-Check `package.json` and `playwright.config.ts`. Confirm:
-- `baseURL` is defined (e.g. `http://localhost:3000`)
-- `webServer` is configured to start local dev servers automatically
-- Required browser projects are defined (Desktop Chrome, Firefox, Safari, Mobile)
+### Step 1: Inspect Project Stack, Config & Existing E2E Blueprint
+AI excels at pattern matching, but needs a pattern to see first.
+1. Check `package.json` and `playwright.config.ts` (baseURL, webServer, browser projects).
+2. **Read an existing test file:** Scan `tests/**/*.spec.ts` or `e2e/**/*.spec.ts` to inspect how the project uses fixtures (`test.extend`), auth states (`storageState`), and Page Object Models. Replicate these patterns.
 
 ```bash
 # If Playwright is not yet installed:
 npm init playwright@latest
 ```
 
-### Step 2: Outline User Journey & Scenarios
-Identify the target flow. Formulate test cases answering:
-- **What is the entry point?** (URL or page)
-- **What actions does the user perform?** (Fill inputs, click buttons, select options)
-- **What is the expected outcome to assert?** (URL change, visible confirmation toast, new item rendered)
+### Step 2: Extract Context & Consume/Outline Specific User Journey
+Do NOT start from vague prompts (e.g. "write tests for checkout"). Extract:
+- **Target Journey:** Entry URL, starting state (guest vs authenticated)
+- **Happy Path Flow:** User action sequence (fill inputs, click buttons) → URL transition & confirmation elements
+- **Negative & Error Journeys:** Invalid submissions, missing required fields, 404/403 redirects, payment decline messages
+- **Edge Cases:** Empty state, session timeout, boundary input lengths
+- **Behaviors to Verify:** Web-first URL assertions (`await expect(page).toHaveURL(...)`), heading visibility, toast messages
+- **Constraints (สิ่งที่ห้ามทำ):** NEVER use `page.waitForTimeout()`, NEVER use fragile CSS selectors, do NOT test 20 math branch permutations in E2E (delegate to unit tests).
 
 ### Step 3: Select Resilient Locators
 Use the **Locator Hierarchy**:

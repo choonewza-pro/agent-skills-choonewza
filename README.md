@@ -55,7 +55,7 @@ npx skills update
 
 | Skill                                                          | คำอธิบาย                                                                                                                                                              |
 | :------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [`swe-test-planner`](skills/swe-test-planner/SKILL.md)               | สแกน codebase และ git history เพื่อจัดลำดับความสำคัญในการทดสอบด้วย Risk-based Testing (Impact × Likelihood) — ตอบคำถาม "ควร test อะไรก่อน?"                          |
+| [`swe-test-planner`](skills/swe-test-planner/SKILL.md)               | สแกน codebase และ git history เพื่อจัดลำดับความสำคัญด้วย Risk-based Testing พร้อมดึง Context จากโค้ดเพื่อสร้าง Prompt สำหรับให้ AI เขียน Test (Writing Tests with AI) |
 | [`swe-test-engineer`](skills/swe-test-engineer/SKILL.md)             | วิเคราะห์ requirements และสร้าง test cases ด้วย Boundary Value Analysis (BVA), Equivalence Partitioning (EP) และเทคนิคอื่นๆ — รองรับทั้ง business users และ technical users |
 | [`swe-test-unit-test-writer`](skills/swe-test-unit-test-writer/SKILL.md) | คู่มือเขียน unit test คุณภาพสูงสำหรับ TypeScript (Jest/Vitest) — ครอบคลุม AAA pattern, FIRST principles, mocking, naming conventions และ anti-patterns |
 | [`swe-test-integration-test-writer`](skills/swe-test-integration-test-writer/SKILL.md) | คู่มือเขียน integration test สำหรับ TypeScript (API, Database, Messaging) — ครอบคลุม Testcontainers, DB lifecycle, Supertest, MSW และ anti-patterns |
@@ -190,13 +190,14 @@ AI Agent จะดึงคู่มือ (Skills) เหล่านี้ไ�
 ### 🧪 QA & Testing
 
 - **`swe-test-planner`**
-  - **ทำงานเมื่อ:** ต้องการรู้ว่าควร test อะไรก่อน หรือต้องการวางแผนการทดสอบจาก codebase จริง
+  - **ทำงานเมื่อ:** ต้องการรู้ว่าควร test อะไรก่อน หรือต้องการวางแผนการทดสอบจาก codebase จริง พร้อมดึง context และเตรียม prompt ให้ AI เขียน test
   - **คีย์เวิร์ดที่ใช้ถาม:**
     - _"ควร test อะไรก่อนในโปรเจกต์นี้"_
     - _"scan codebase แล้วบอกว่า feature ไหน risk สูง"_
     - _"เรามีเวลาจำกัด test อะไรก่อนดี"_
     - _"จัดลำดับความสำคัญการทดสอบ"_
     - _"วิเคราะห์ความเสี่ยงก่อนทดสอบ"_
+    - _"เตรียม prompt ให้ AI เขียน test จาก codebase"_
     - _"give me a risk-based test plan"_
 
 - **`swe-test-engineer`**

@@ -76,6 +76,39 @@ If tests exist → mark `has_tests: true` → apply Likelihood modifier −1.
 
 ---
 
+## Step 1b: AI Test Context Discovery (for Top-Risk Features)
+
+For features classified as 🔴 Critical or 🟠 High, perform in-depth code scanning to extract context needed for AI test generation:
+
+### 1. Existing Test Style Discovery (Pattern Blueprint)
+Scan for existing test files across the project to provide AI with a concrete pattern to mimic:
+- Find any existing test file (e.g. `src/**/*.test.ts`)
+- Inspect:
+  - **Runner & Imports:** `import { describe, it, expect, vi } from 'vitest'` vs `jest`
+  - **Structure:** `describe('Feature', () => { it('should...', () => { ... }) })`
+  - **Mocking style:** `vi.mock()` vs `jest.mock()` vs dependency injection
+  - **Assertions:** `.toBe()`, `.toEqual()`, `.toMatchObject()`
+- Record 1 representative test file path as `style_reference_test`.
+
+### 2. Imports & Type Extraction
+Inspect the feature's source files for:
+- **Validation Schemas:** `zod` (`z.object`, `z.string()`), `joi`, `yup`, `class-validator`
+- **Interfaces & Types:** `interface`, `type`, DTOs, request/response models
+- Record the schema/type file paths.
+
+### 3. Mock Candidates Discovery
+Analyze imports to separate dependencies:
+- **Mock Targets:** External APIs (`stripe`, `twilio`), ORM/DB clients (`prisma`, `drizzle`, `typeorm`), HTTP clients (`axios`, `fetch`), message brokers (`bullmq`, `redis`).
+- **Do NOT Mock:** Pure utility functions, domain models, validation schemas, error classes.
+
+### 4. Condition & Boundary Extraction (via swe-test-engineer)
+Scan target feature logic and schemas for concrete values using [`swe-test-engineer`](../../swe-test-engineer/SKILL.md) rules:
+- **BVA (Numeric / Date / Time):** Grep for `<`, `<=`, `>`, `>=`, `.min(`, `.max(`. Extract exact numbers (e.g., `amount: 1..50000` → boundaries `[0, 1, 2, 49999, 50000, 50001]`).
+- **EP (Enums / Formats / Strings):** Grep for `enum `, `z.enum(`, union literals `'a' | 'b'`, regex validators. Extract valid partitions and invalid partitions (empty, invalid format, null/undefined).
+- **STT (Workflow & Status):** Grep for status fields (`status: 'pending' | 'paid' | 'failed'`), state machine configurations, switch/case transitions. Extract valid and forbidden transitions.
+
+---
+
 ## Step 2: Likelihood Signals
 
 ### Git Command

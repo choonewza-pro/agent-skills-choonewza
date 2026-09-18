@@ -103,18 +103,55 @@ After the table, provide a brief section:
 
 ---
 
-### 6. Next Steps
+### 6. 🤖 AI Test Context & Specific Prompt Package
+
+For each **🔴 Critical** and **🟠 High** feature, provide the extracted context and a copy-paste ready Specific Prompt (avoiding vague prompts like "write tests for file.js"):
+
+```markdown
+## 🤖 AI Test Prompts & Context Package
+
+### Feature: [Feature Name] ([Target File/Function])
+
+**Context Assets:**
+- 📄 Source: `[path/to/target.ts]`
+- 📑 Types & Schemas: `[path/to/types.ts]`
+- 🧪 Style Blueprint Test: `[path/to/existing.test.ts]` (mimic this test's runner, naming, and mock style)
+- 🔌 Dependencies to Mock: `[e.g., prisma.payment, stripeSDK]`
+- 🚫 Dependencies NOT to Mock: `[e.g., currencyFormatter, domain validators]`
+
+**Specific Prompt for AI Test Writer:**
+> Write unit tests for `[functionName()]` in `[path/to/target.ts]`:
+> - **Target:** `[functionName(args)]`
+> - **Happy Path:**
+>   - [Case 1: Valid input produces expected output]
+> - **Negative / Error Cases:**
+>   - [Case 2: Missing or invalid payload throws specific error]
+> - **Edge Cases (Derived via swe-test-engineer):**
+>   - [BVA boundary cases: min-1, min, max, max+1]
+>   - [EP partition cases: empty string, invalid format, unauthorized role]
+>   - [STT transition cases: forbidden state jumps]
+> - **Behavior to Verify:**
+>   - [Verify side effect: e.g. verify password hashing, DB transaction, event emission]
+> - **Constraints (สิ่งที่ห้ามทำ):**
+>   - Do NOT test implementation details / private variables
+>   - Do NOT mock internal pure helpers
+>   - Follow AAA pattern and mimic style in `[path/to/existing.test.ts]`
+```
+
+---
+
+### 7. Next Steps
 
 Always end with:
 
 ```markdown
 ## ➡️ Next Steps
 
-1. Start with 🔴 **Critical** features above
-2. For each feature, activate **swe-test-engineer** and provide the feature's requirement or specification
-3. swe-test-engineer will generate unit test cases + business test cases using the recommended technique
+1. Start with 🔴 **Critical** features above using the **Specific Prompts** provided.
+2. If detailed boundary or state analysis is needed, run **swe-test-engineer** with the feature requirement.
+3. Pass the generated Prompt & Context Package to **swe-test-unit-test-writer** (for unit tests), **swe-test-integration-test-writer** (for API/DB tests), or **swe-test-e2e-playwright** (for browser flows).
 
-**Handoff example:**
+**Handoff to swe-test-engineer example:**
 > "Use swe-test-engineer: Payment feature — status can be pending, processing, paid, failed, refunded. Transitions: pending → processing → paid, paid → refunded. Invalid: paid → pending."
 ```
 

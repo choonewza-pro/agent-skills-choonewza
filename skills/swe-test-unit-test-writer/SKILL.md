@@ -2,22 +2,29 @@
 name: swe-test-unit-test-writer
 description: >
   Guides AI agents to write high-quality TypeScript unit tests using Jest or
-  Vitest. Covers Arrange-Act-Assert pattern, FIRST principles, scenario design
-  (happy/negative/error/boundary), mocking strategies, naming conventions, and
-  anti-patterns. Use when the user asks to "write unit tests", "เขียน test",
-  "เพิ่ม test", "สร้าง test file", or when an agent needs to produce .test.ts
-  or .spec.ts files. Focused on unit tests only — for integration tests, use a
-  dedicated integration test skill.
+  Vitest based on Writing Tests with AI principles. Ensures AI inspects existing
+  project test patterns to mimic style, analyzes types & contracts, adheres to
+  clear mocking boundaries, and covers happy/negative/boundary/error scenarios.
+  Use when the user asks to "write unit tests", "เขียน test", "เพิ่ม test", "สร้าง test file",
+  or when consuming a specific test prompt from swe-test-planner.
 license: Apache-2.0
 allowed-tools: ReadFile, ListDirectory, RunCommand, WriteFile
 metadata:
   author: choonewza
-  version: "0.1"
+  version: "0.2"
 ---
 
 ## Overview
 
 You are a unit test writer for **TypeScript** projects using **Jest** or **Vitest**.
+
+> **Writing Tests with AI Mindset:**
+> การเขียน Test ด้วย AI Coding Assistant ให้มีประโยชน์สูงสุด ต้องยึดหลัก:
+>
+> 1. **Vague Prompt → Vague Tests:** อย่าเริ่มเขียนโค้ดจาก Prompt กว้างๆ เช่น "เขียน test ให้ไฟล์นี้" โดยไม่มีขอบเขต
+> 2. **Good Context + Specific Prompt → Useful Tests:** ต้องมี Source code, Types, Dependencies ที่ชัดเจน
+> 3. **AI เป็น “ผู้ช่วยร่าง Test” ไม่ใช่ผู้ตัดสินว่าระบบถูกต้องแล้ว:** ตรวจสอบ Contract และพฤติกรรมจริง ไม่ใช่แค่เขียนให้ผ่านตามโค้ดที่มี Bug อยู่แล้ว
+> 4. **AI เก่งเรื่อง Pattern Matching แต่ต้องมี Pattern ให้เห็นก่อน:** ก่อนเขียนไฟล์ใหม่ **ต้องค้นหาและอ่านไฟล์ Test เดิมในโปรเจกต์เสมอ** เพื่อเลียนแบบ Framework, สไตล์การตั้งชื่อ, Mocking syntax และ Assertion conventions ให้กลมกลืน
 
 > **Testing in Practice Mindset:**
 > การเขียน Test ที่ดีไม่ได้เริ่มจาก API ของ Testing Framework แต่เริ่มจากการ **เข้าใจ Behavior และ Contract ที่ระบบต้องรับประกัน**
@@ -41,8 +48,8 @@ Your job is to produce `.test.ts` / `.spec.ts` files that are:
 or API tests.
 
 > 💡 **การกำหนดค่าที่จะใช้ในการเขียน Test:**
-> สำหรับการวิเคราะห์ ออกแบบ และกำหนดค่าข้อมูลทดสอบ (Test Data Design เช่น การหาค่า Boundary ด้วย BVA หรือแบ่งกลุ่มด้วย EP) **ให้ไปอ่านและอ้างอิงจากสกิล [`swe-test-engineer`](../swe-test-engineer/SKILL.md)** แล้วนำค่าเหล่านั้นมาเขียนลงในโค้ด Test ของสกิลนี้
-> สำหรับการจัดลำดับความสำคัญของ Test ให้ใช้ `swe-test-planner`
+> สำหรับการวิเคราะห์ ออกแบบ และกำหนดค่าข้อมูลทดสอบ (Test Data Design เช่น การหาค่า Boundary ด้วย BVA หรือแบ่งกลุ่มด้วย EP) **ให้อ้างอิงจากสกิล [`swe-test-engineer`](../swe-test-engineer/SKILL.md)** แล้วนำค่าเหล่านั้นมาเขียนลงในโค้ด Test ของสกิลนี้
+> สำหรับการจัดลำดับความสำคัญและรับ Specific Prompts ให้ใช้ [`swe-test-planner`](../swe-test-planner/SKILL.md)
 
 For detailed references, see:
 
@@ -81,10 +88,12 @@ Do NOT activate when:
 
 Before writing any test, internalize these rules. See [references/anti-patterns.md](references/anti-patterns.md) for details.
 
+- ❌ **Do not write tests from vague prompts without extracting context** — if the prompt is vague (e.g. "write tests for userService.js"), never start coding immediately. Extract the function contract, look up types, inspect existing tests, and establish specific scenarios first
+- ❌ **Do not invent an isolated test style** — always inspect at least 1 existing test file in the project first to mimic the test runner, import conventions, assertion style, and mock patterns
 - ❌ **Do not test implementation details** — test behavior and contracts, not internal methods or intermediate variables.
   _Litmus Test:_ ถ้า refactor โค้ดภายในแล้ว behavior เหมือนเดิม Test ต้องยังผ่านเสมอ (ถ้า fail แปลว่า test implementation detail)
 - ❌ **Do not bundle multiple behaviors in one test** — follow One Behavior Per Test. Avoid the "And Smell" in test names (e.g., `formats price and handles errors and logs result` ❌)
-- ❌ **Do not mock everything** — over-mocking means you're testing the mocks, not the code
+- ❌ **Do not mock everything** — over-mocking means you're testing the mocks, not the code. Mock external APIs and DB clients; do NOT mock pure domain entities, helpers, or validation schemas
 - ❌ **Do not omit `await` before async assertions** — `expect(fn()).rejects` without `await` causes floating promises and silent false positives
 - ❌ **Do not use weak assertions or brittle whole-object matches** — avoid `.toBeTruthy()` on objects, use `.toMatchObject()` or `expect.objectContaining()` instead of fragile `.toEqual()` on dynamic fields
 - ❌ **Do not assert exact error message strings** — test Custom Error classes or error codes, not brittle wording
@@ -99,9 +108,11 @@ Before writing any test, internalize these rules. See [references/anti-patterns.
 
 ## Instructions
 
-### Step 1: Detect Test Framework
+### Step 1: Detect Test Framework & Inspect Existing Test Style (Style Blueprint)
 
-Check the project to determine Jest or Vitest:
+AI excels at pattern matching, but needs a pattern to see first. Before writing any test:
+
+1. **Check the project framework (Jest vs Vitest):**
 
 | Signal                                                   | Framework |
 | -------------------------------------------------------- | --------- |
@@ -111,42 +122,35 @@ Check the project to determine Jest or Vitest:
 | `package.json` → `devDependencies` contains `vitest`     | Vitest    |
 | Import from `vitest` in existing test files              | Vitest    |
 
-**Key differences to remember:**
-
-| Feature       | Jest                             | Vitest                                           |
-| ------------- | -------------------------------- | ------------------------------------------------ |
-| Mock module   | `jest.mock('./module')`          | `vi.mock('./module')`                            |
-| Mock function | `jest.fn()`                      | `vi.fn()`                                        |
-| Spy           | `jest.spyOn(obj, 'method')`      | `vi.spyOn(obj, 'method')`                        |
-| Timer mock    | `jest.useFakeTimers()`           | `vi.useFakeTimers()`                             |
-| Reset         | `jest.clearAllMocks()`           | `vi.clearAllMocks()`                             |
-| Globals       | `describe/it/expect` auto-global | Must set `globals: true` or import from `vitest` |
-
-If both are present, prefer Vitest (it's the newer standard).
-If neither is found, ask the user via the tool which framework to use.
+2. **Read a representative existing test file in the project:**
+   - Scan for `**/*.test.ts` or `**/*.spec.ts`
+   - Observe how the project writes tests:
+     - Imports (`describe, it, expect` from `'vitest'` or globals)
+     - Mock syntax (`vi.mock('./service')` vs `jest.mock('./service')`)
+     - Structure: describe blocks, naming format, Arrange-Act-Assert spacing
+     - Assertion style (`expect(...).toBe(...)`, `.toMatchObject(...)`)
+   - **Rule:** Replicate this style in your new test file to maintain project harmony.
 
 ---
 
-### Step 2: Analyze the Source Code & Function Contract
+### Step 2: Analyze Source Code, Types & Extract Contract
 
 Before writing any test, **read and understand** the source code and extract its **Contract**:
 
 > **Contract Question:** _"ฟังก์ชันหรือโมดูลนี้รับประกันอะไร (What does this function guarantee)?"_
 > Test ควรตรวจ Contract เหล่านี้ ไม่ใช่รายละเอียดภายใน (Implementation Details)
 
-1. **Identify the 4 Contract Elements:**
-   - **Input:** ชนิดของข้อมูล ขอบเขต และค่าที่เป็นไปได้
-   - **Output:** ค่าที่ส่งกลับเมื่อทำงานสำเร็จ
-   - **Side Effect:** การเปลี่ยนแปลงภายนอก (เช่น เรียก API, บันทึก log, อัปเดต state)
-   - **Error:** สถานการณ์ที่ต้อง throw / reject (เช่น validation fail, dependency timeout)
-2. **Apply the Refactor Litmus Test:**
-   - ถามตนเอง: _"ถ้าเรา Refactor Implementation แต่ Output และ Behavior ยังเหมือนเดิม Test นี้ควร Fail หรือไม่?"_
-   - ถ้าตอบว่า "Fail" แปลว่ากำลัง test implementation detail หรือ intermediate variables!
-3. **Identify dependencies** — what does this module import? Which need mocking?
-4. **Identify business rules & boundaries** — what conditions, branches, and edge cases exist?
-5. **Check for existing tests** — avoid duplicating what's already tested
-
-Build a mental map:
+1. **Gather the 4 Context Elements:**
+   - **Source Code:** Target function, parameters, return types
+   - **Types & Schemas:** TypeScript interfaces, Zod/Joi validation schemas, DTOs
+   - **Existing Test Blueprint:** File inspected in Step 1
+   - **Dependencies to Mock vs NOT Mock:**
+     - *Must Mock:* External APIs (Stripe, Twilio), Database/ORM clients, Redis, system timers
+     - *Do NOT Mock:* Pure utilities, calculation logic, domain entities, validation schemas
+2. **If given a Specific Prompt (from `swe-test-planner`):**
+   - Directly extract: Target, Happy Path, Negative Path, Edge Cases (BVA/EP values), Behaviors to Verify, and Constraints ("สิ่งที่ห้ามทำ")
+3. **If given a Vague Prompt (e.g. "write tests for userService.ts"):**
+   - Do NOT write vague tests! Build the contract map first:
 
 ```
 Function: calculateDiscount(price, userRole, couponCode)
@@ -156,6 +160,7 @@ Function: calculateDiscount(price, userRole, couponCode)
 │   ├── Side Effects: none
 │   └── Errors: throws InvalidPriceError if price < 0
 ├── Dependencies: CouponService.validate() ← needs mock
+├── What NOT to mock: currencyMathHelper, DiscountRuleEnum
 ├── Business rules:
 │   ├── price < 0 → throw InvalidPriceError
 │   ├── userRole "vip" → 20% discount
@@ -163,27 +168,23 @@ Function: calculateDiscount(price, userRole, couponCode)
 │   ├── userRole "guest" → 0% discount
 │   ├── valid coupon → additional 5% off
 │   └── discount cap at 50% max
-└── Representative Edge cases: price = 0, coupon expired, unknown role
+└── Edge cases (BVA/EP): price = 0, coupon expired, unknown role
 ```
 
 ---
 
-### Step 3: Design Test Scenarios
+### Step 3: Design Test Scenarios (The 6-Point Structure)
 
-For each function, design scenarios BEFORE writing code.
-See [references/scenario-design.md](references/scenario-design.md) and [references/case-types.md](references/case-types.md).
+For each function, design scenarios covering:
 
-For each business rule, think through:
-
-| Type              | Question                                 | Example                                               |
-| ----------------- | ---------------------------------------- | ----------------------------------------------------- |
-| **Happy path**    | What happens when everything is correct? | VIP user with valid coupon gets 25% off               |
-| **Negative path** | What should the system reject?           | Negative price → throw error                          |
-| **Error case**    | What if a dependency fails?              | CouponService throws timeout → handle gracefully      |
-| **Boundary case** | What about values at the edge?           | Discount = exactly 50% (cap)                          |
-| **Edge case**     | What about unusual inputs?               | price = 0, coupon = empty string, role = unknown enum |
-
-Group scenarios by the business rule they validate, not by input type.
+| Component | Purpose | Example |
+|---|---|---|
+| **1. Target** | Function / method under test | `calculateDiscount(100, 'vip', null)` |
+| **2. Happy Path** | Valid business flow succeeds | VIP user receives 20% discount |
+| **3. Negative Path** | Invalid inputs rejected | Negative price throws `InvalidPriceError` |
+| **4. Edge Cases** | Boundary values (BVA) & Partitions (EP) | Price = 0 (min valid), discount cap = 50% |
+| **5. Behavior to Verify** | Side effects & assertions | Verify DB transaction committed, password hashed |
+| **6. Constraints** | Guardrails (สิ่งที่ห้ามทำ) | Do not mock math helpers, follow AAA pattern |
 
 > 💡 **การกำหนดค่าตัวแปรและข้อมูลทดสอบ (Test Values & Data):**
 > หากต้องการเทคนิคในการคำนวณและกำหนดค่าที่จะนำมาใช้ใน test case แต่ละตัวอย่างเป็นระบบ (เช่น การหาค่าขอบเขต min-1, min, min+1 ด้วย BVA หรือการเลือกตัวแทน Equivalence Partitions ด้วย EP) **ให้อ่านและปฏิบัติตามแนวทางของ [`swe-test-engineer`](../swe-test-engineer/SKILL.md)**

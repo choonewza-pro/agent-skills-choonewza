@@ -101,21 +101,71 @@ output format, tone, and level of detail.
 
 ---
 
+## 🤖 AI Test Prompts & Context Package
+
+### 🔴 Critical Feature 1: Payment (Stripe Checkout)
+
+**Context Assets Discovered:**
+- 📄 Source: `src/services/paymentService.ts` (`processCheckout`)
+- 📑 Types & Schemas: `src/types/payment.ts` (`CheckoutPayload`, `PaymentStatus`)
+- 🧪 Style Blueprint Test: `src/services/__tests__/cartService.test.ts` (Vitest, `describe/it`, AAA, `vi.mock`)
+- 🔌 Dependencies to Mock: `stripe.paymentIntents`, `prisma.order`
+- 🚫 Dependencies NOT to Mock: `calculateTax()` utility, currency formatting
+
+**Specific Prompt for AI Assistant:**
+> Write comprehensive unit tests for `processCheckout()` in `src/services/paymentService.ts`:
+> - **Target:** `processCheckout(orderId: string, amount: number, paymentMethod: string)`
+> - **Happy Path:**
+>   - Valid payment method and positive amount creates Stripe PaymentIntent and updates order status to 'processing'.
+> - **Negative / Error Cases:**
+>   - Invalid/declined card triggers `PaymentFailedError` and updates order status to 'failed'.
+>   - Non-existent orderId throws `NotFoundError`.
+> - **Edge Cases (swe-test-engineer values):**
+>   - BVA on amount: 0 THB (fails with InvalidAmountError), 1 THB (minimum valid, passes), 500,000 THB (maximum limit, passes), 500,001 THB (fails).
+>   - EP on payment methods: valid partitions `['card', 'promptpay', 'truemoney']`, invalid partition `'unsupported_crypto'`.
+>   - STT status transition: attempt transition from 'refunded' back to 'paid' must reject.
+> - **Behavior to Verify:**
+>   - Verify `stripe.paymentIntents.create` is invoked with correct idempotent key and metadata.
+>   - Verify order transaction log record is written to DB.
+> - **Constraints (สิ่งที่ห้ามทำ):**
+>   - Do NOT mock `calculateTax` helper.
+>   - Do NOT test internal database connection pool.
+>   - Follow Vitest style from `src/services/__tests__/cartService.test.ts` using `vi.mock` and `expect().toMatchObject()`.
+
+---
+
+### 🔴 Critical Feature 2: Auth (Login & Session)
+
+**Context Assets Discovered:**
+- 📄 Source: `src/services/authService.ts` (`loginUser`)
+- 📑 Types & Schemas: `src/types/auth.ts` (`LoginInput`, `UserRole`)
+- 🧪 Style Blueprint Test: `src/services/__tests__/cartService.test.ts`
+- 🔌 Dependencies to Mock: `prisma.user`, `jwt.sign`
+- 🚫 Dependencies NOT to Mock: `bcrypt.compare` (or use deterministic salt)
+
+**Specific Prompt for AI Assistant:**
+> Write unit tests for `loginUser()` in `src/services/authService.ts`:
+> - **Target:** `loginUser(email: string, password: string)`
+> - **Happy Path:**
+>   - Correct email and password returns JWT token and user profile (excluding password hash).
+> - **Negative / Error Cases:**
+>   - Non-existent email throws `InvalidCredentialsError`.
+>   - Incorrect password throws `InvalidCredentialsError` (generic message to prevent email enumeration).
+> - **Edge Cases (swe-test-engineer values):**
+>   - EP email partitions: invalid partition `'user@'`, `'user.com'`, empty string `""` throw `ValidationError`.
+>   - STT account state: locked user (`status === 'locked'`) cannot login and throws `AccountLockedError`.
+> - **Behavior to Verify:**
+>   - Verify password is verified with hash and plain password is never returned or logged.
+> - **Constraints (สิ่งที่ห้ามทำ):**
+>   - Follow existing AAA test pattern in `src/services/__tests__/cartService.test.ts`.
+
+---
+
 ## ➡️ Next Steps
 
-1. Start with 🔴 **Critical** features: Payment → Auth → Order
-2. For each feature, activate **swe-test-engineer** and provide the requirement or spec
-3. swe-test-engineer will generate Unit Test Cases + Business Test Cases using the recommended technique
-
-**Handoff examples:**
-
-> "Use swe-test-engineer: **Payment** — Stripe payment status: pending, processing, paid, failed, refunded.
-> Transitions: pending → processing → paid, paid → refunded, any → failed. Invalid: paid → pending."
-
-> "Use swe-test-engineer: **Auth** — User role: admin, user, guest (EP).
-> Session state: anonymous → authenticated → expired → locked."
-
-> "Use swe-test-engineer: **Order quantity** — numeric, min 1, max 999 (BVA)."
+1. Start with 🔴 **Critical** features: Payment → Auth → Order using the **Specific Prompts** above.
+2. For detailed boundary analysis or decision tables, run **swe-test-engineer** with the requirement.
+3. Pass the generated Prompt & Context Package to **swe-test-unit-test-writer** (for unit tests) or **swe-test-integration-test-writer** (for API tests).
 
 ---
 

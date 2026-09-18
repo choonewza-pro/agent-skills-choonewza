@@ -2,22 +2,28 @@
 name: swe-test-integration-test-writer
 description: >
   Guides AI agents to write high-quality TypeScript integration tests using
-  Jest or Vitest with real databases (Prisma, Drizzle, TypeORM), HTTP endpoints
-  (Supertest, Fastify, Next.js App Router, NestJS), Testcontainers, and MSW for
-  external services. Covers sociable testing, database lifecycles (truncate vs
-  rollback), worker concurrency, factory fixtures, and teardown hygiene. Use
-  when asked to "write integration tests", "เขียน integration test", "เทสต์ API กับ
-  DB", "สร้าง integration test", or to produce .integration.test.ts files.
+  Jest or Vitest based on Writing Tests with AI principles. Ensures AI gathers
+  essential context (real database schemas, migrations, test containers, factory patterns),
+  inspects existing integration test styles, enforces unmocked internal components,
+  uses MSW for third-parties, and consumes specific integration test prompts.
 license: Apache-2.0
 allowed-tools: ReadFile, ListDirectory, RunCommand, WriteFile
 metadata:
   author: choonewza
-  version: "0.1"
+  version: "0.2"
 ---
 
 ## Overview
 
 You are an integration test writer for **TypeScript** projects using **Jest** or **Vitest**.
+
+> **Writing Tests with AI Mindset:**
+> การเขียน Integration Test ด้วย AI ให้เกิดความเชื่อมั่นสูงสุด:
+>
+> 1. **Vague Prompt → Fragile / Mock-Heavy Tests:** อย่าเริ่มเขียนจากคำสั่งลอยๆ เช่น "เขียน integration test ให้ order API" เพราะ AI มักจะเผลอ Mock ฐานข้อมูลหรือสุ่มสร้าง schema ที่ไม่มีอยู่จริง
+> 2. **Context First:** ก่อนเขียน AI **ต้องอ่าน Schema จริง (เช่น `schema.prisma`), Migration, และ Factory Helper ที่มีอยู่แล้วในโปรเจกต์** เพื่อให้ Data Model และความสัมพันธ์ถูกต้อง 100%
+> 3. **Pattern Matching:** AI **ต้องอ่านไฟล์ Integration Test เดิมในโปรเจกต์** เพื่อเลียนแบบ Lifecycle Management (`beforeEach` truncate, transaction rollback, test database connection)
+> 4. **AI เป็นผู้ช่วยร่าง Test:** ต้องตรวจสอบเสมอว่า Test ทำการ Assert ข้าม Layer ทะลุถึง Real Database State จริง ไม่ใช่แค่ตรวจ HTTP Status Code
 
 > **Integration Testing Mindset (Sociable Testing):**
 > Integration Test ไม่ใช่การจำลองทุกอย่างผ่าน Mock แต่คือการ **พิสูจน์ว่าชิ้นส่วนต่างๆ ทำงานร่วมกันได้จริงในสถานการณ์เสมือนจริง (Real Collaboration)**
@@ -39,7 +45,7 @@ Your job is to produce `.integration.test.ts` / `.int.spec.ts` files that are:
 **Scope:** Integration tests (API-to-Database, Service-to-Database/Cache, Worker/Queue).
 - For pure isolated unit tests, use `swe-test-unit-test-writer`.
 - For test case design (BVA / EP tables), reference `swe-test-engineer`.
-- For risk prioritization, reference `swe-test-planner`.
+- For risk prioritization and receiving Specific Prompts, reference `swe-test-planner`.
 
 For detailed references, see:
 
@@ -79,51 +85,58 @@ Do NOT activate when:
 
 Before writing any integration test, internalize these rules. See [references/anti-patterns.md](references/anti-patterns.md) for details.
 
-- ❌ **Do not mock internal services or database repositories** — if you mock the repository, you wrote a slow fake unit test, not an integration test.
-- ❌ **Do not use `sleep()` or `setTimeout()` to wait for async events** — use deterministic polling utilities (`waitFor()`).
-- ❌ **Do not leave open database pools or HTTP servers** — always close pools, clients, and servers in `afterAll`.
-- ❌ **Do not share mutable DB records between tests** — each test must seed its own data and clean up.
-- ❌ **Do not hardcode auto-increment or fixed IDs** — use deterministic Factory functions with dynamic UUIDs or sequences.
-- ❌ **Do not run tests against staging/production databases** — include an environment safety guard that halts if `NODE_ENV !== 'test'`.
-- ❌ **Do not test 20 math branch permutations in integration tests** — test branch math in fast unit tests (Testing Trophy).
-- ❌ **Do not ignore worker collisions in parallel test runners** — use single-thread mode or schema-per-worker.
+- ❌ **Do not write tests without reading the real database schema and factories** — never guess table names, column constraints, or relations. Always read `schema.prisma`, `drizzle/schema.ts`, or existing entity files first
+- ❌ **Do not write tests from vague prompts** — if prompt is vague (e.g. "test order API"), extract the route signature, payload types, DB assertions, and external MSW mocks first
+- ❌ **Do not mock internal services or database repositories** — if you mock the repository, you wrote a slow fake unit test, not an integration test
+- ❌ **Do not use `sleep()` or `setTimeout()` to wait for async events** — use deterministic polling utilities (`waitFor()`)
+- ❌ **Do not leave open database pools or HTTP servers** — always close pools, clients, and servers in `afterAll`
+- ❌ **Do not share mutable DB records between tests** — each test must seed its own data and clean up
+- ❌ **Do not hardcode auto-increment or fixed IDs** — use deterministic Factory functions with dynamic UUIDs or sequences
+- ❌ **Do not run tests against staging/production databases** — include an environment safety guard that halts if `NODE_ENV !== 'test'`
+- ❌ **Do not test 20 math branch permutations in integration tests** — test branch math in fast unit tests (Testing Trophy)
+- ❌ **Do not ignore worker collisions in parallel test runners** — use single-thread mode or schema-per-worker
 
 ---
 
 ## Instructions
 
-### Step 1: Detect Test Framework, DB & HTTP Stack
+### Step 1: Detect Stack & Inspect Existing Integration Test Blueprint
 
-Inspect the project to identify the active technologies:
+AI excels at pattern matching, but needs a pattern to see first. Before writing tests:
 
-1. **Test Runner:**
-   - Vitest: `vitest.config.ts` / `package.json` contains `vitest`
-   - Jest: `jest.config.ts` / `package.json` contains `jest`
-2. **Database & ORM:**
-   - Prisma (`prisma/schema.prisma`), Drizzle (`drizzle.config.ts`), TypeORM (`ormconfig.*`), Mongoose (`mongoose`)
-3. **HTTP / Web Framework:**
-   - Express (`express`), Fastify (`fastify`), NestJS (`@nestjs/core`), Next.js App Router (`app/api/**/route.ts`)
-4. **Database Infrastructure:**
-   - Testcontainers (`@testcontainers/postgresql`), Docker Compose (`docker-compose.test.yml`), or local test DB URL in `.env.test`
+1. **Detect Stack:**
+   - **Test Runner:** Vitest (`vitest.config.ts`) vs Jest (`jest.config.ts`)
+   - **Database & ORM:** Prisma (`schema.prisma`), Drizzle, TypeORM, Mongoose
+   - **HTTP Framework:** Express, Fastify, Next.js App Router (`route.ts`), NestJS
+   - **Infra:** Testcontainers, Docker Compose, or local test DB in `.env.test`
+
+2. **Read a representative existing integration test file:**
+   - Search for `**/*.integration.test.ts` or `**/*.int.spec.ts`
+   - Observe how database lifecycle (`beforeEach` cleanup, `afterAll` disconnect) is implemented
+   - Observe how factories and Supertest/Fastify injection are structured
+   - **Rule:** Replicate the project's established lifecycle pattern.
 
 ---
 
-### Step 2: Define Integration Boundaries & Testing Trophy Scope
+### Step 2: Extract Context (Schemas, Boundaries) & Consume Specific Prompt
 
-Before writing tests, determine the exact boundary:
+Before writing code, establish the **Integration Contract**:
 
-1. **What is INSIDE the boundary (Run Real):**
-   - Real HTTP route handlers / controllers
-   - Real middleware (Authentication, validation, error handlers)
-   - Real business services and domain logic
-   - Real ORM / query builders and Real Database (Postgres, MySQL, Redis, MongoDB)
-2. **What is OUTSIDE the boundary (Mock at Network Level via MSW):**
-   - External Payment Gateways (Stripe, Omise)
-   - External Communication (Twilio, SendGrid, LINE Notify)
-   - Third-party SaaS Webhooks and REST APIs
-3. **Scope Discipline (Testing Trophy):**
-   - Focus integration tests on **Critical User Journeys, Database Transactions, and HTTP Contracts**.
-   - Leave edge-case arithmetic and string formatting permutations to unit tests.
+1. **Gather the 4 Context Elements for Integration Tests:**
+   - **Target Route / Service:** Method, URL path, request headers/payload
+   - **Database Schema & Constraints:** Read the actual schema file to see columns, non-null fields, foreign keys, and unique indexes
+   - **Existing Lifecycle Blueprint:** Inspected in Step 1
+   - **Mocking Boundaries:**
+     - *INSIDE (Real, NEVER Mock):* Controllers, Services, Repositories, Real Database, Real Transactions
+     - *OUTSIDE (Mock via MSW at Network Level):* Stripe, Twilio, SendGrid, external SaaS
+2. **If given a Specific Prompt (from `swe-test-planner`):**
+   - Consume the 6 elements:
+     - **Target:** Route/Handler
+     - **Happy Path:** Request succeeds, returns correct status/body, AND **database record is created/updated in real DB**
+     - **Negative Path:** Bad input returns 400/404/422, AND **no database change occurred (rollback verified)**
+     - **Edge Cases:** Unique constraint collision, concurrent requests, foreign key violation
+     - **Behavior to Verify:** Transactional atomicity, DB state verification, MSW call count
+     - **Constraints (สิ่งที่ห้ามทำ):** Do not mock internal services, do not use `sleep()`, follow project factory patterns.
 
 ---
 
